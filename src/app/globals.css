@@ -1,16 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
 :root {
-  --bg-color: #06080a;
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --primary: #00f2ff;
-  --primary-glow: rgba(0, 242, 255, 0.15);
-  --secondary: #bc13fe;
-  --secondary-glow: rgba(188, 19, 254, 0.15);
-  --accent: #00ff88;
+  --bg-color: #0c0c0e;
+  --card-bg: #16161a;
+  --card-border: #222226;
+  --primary: #ffffff;
+  --accent: #5d5dff;
   --text-main: #ffffff;
-  --text-secondary: #94a3b8;
-  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-  --glass-blur: blur(20px);
+  --text-secondary: #8a8a8e;
+  --font-main: 'Outfit', sans-serif;
+  --radius-lg: 16px;
+  --radius-md: 12px;
 }
 
 * {
@@ -18,6 +18,13 @@
   padding: 0;
   margin: 0;
   -webkit-tap-highlight-color: transparent;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+a, button, Link {
+  text-decoration: none !important;
+  color: inherit;
 }
 
 body {
@@ -25,90 +32,76 @@ body {
   color: var(--text-main);
   font-family: var(--font-main);
   overflow-x: hidden;
-  min-height: 100vh;
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(180, 100%, 50%, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(280, 100%, 50%, 0.05) 0px, transparent 50%);
+  -webkit-font-smoothing: antialiased;
 }
 
 .pwa-container {
-  max-width: 500px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 20px;
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding: 24px;
+  padding-bottom: 110px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Modern Minimalist Card */
 .glass {
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
-  border-radius: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  padding: 20px;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: var(--primary);
   color: #000;
   border: none;
-  padding: 16px 24px;
-  border-radius: 18px;
-  font-weight: 800;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px -10px rgba(0, 242, 255, 0.5);
+  transition: opacity 0.2s ease;
+  width: 100%;
 }
 
 .btn-primary:active {
-  transform: scale(0.96);
+  opacity: 0.8;
 }
 
+/* Sophisticated Input styling */
 .glass-input {
-  background: rgba(255, 255, 255, 0.05);
+  background: #1c1c1f;
   border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
   color: white;
   width: 100%;
   outline: none;
-  transition: all 0.2s ease;
+  font-size: 15px;
+  font-family: var(--font-main);
+  transition: border-color 0.2s ease;
 }
 
 .glass-input:focus {
-  border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: #3e3e42;
+}
+
+.glass-input::placeholder {
+  color: #4c4c50;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Nav Styles */
-.glass-nav {
-  background: rgba(10, 15, 20, 0.8);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--card-border);
-  padding: 12px 20px 30px;
-}
-
-h1, h2, h3 {
-  letter-spacing: -0.03em;
-}
-
+/* Hide scrollbars */
 ::-webkit-scrollbar {
   display: none;
 }

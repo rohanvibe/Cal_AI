@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, User, Bot, Loader2, Sparkles, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([
-    { role: 'assistant', content: 'Hey! I am your Cal AI mentor. I know your stats and goals—what is on your mind today?' }
+    { role: 'assistant', content: 'How can I help you with your nutrition or workout today?' }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,92 +51,60 @@ export default function ChatPage() {
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.content }]);
     } catch (err: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}. Please check your Gemini API key.` }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}. Please verify your API key.` }]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] animate-fade-in relative">
-      {/* Mesh Gradient Background for Chat */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--primary-glow)] to-transparent opacity-20 h-40"></div>
-
+    <div className="flex flex-col h-[calc(100vh-140px)] animate-fade-in">
       <header className="py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-lg shadow-[var(--primary-glow)]">
-                <Sparkles size={20} className="text-black" />
-            </div>
-            <div>
-                <h1 className="text-xl font-black italic uppercase tracking-tighter leading-none">AI Mentor</h1>
-                <p className="text-[10px] text-[var(--accent)] font-bold uppercase mt-1 tracking-widest">Live Optimization</p>
-            </div>
-        </div>
+        <h1 className="text-xl font-semibold tracking-tight">AI Advisor</h1>
       </header>
 
-      <div className="flex-1 overflow-hidden flex flex-col glass border-none rounded-[32px] bg-black/40">
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+      <div className="flex-1 overflow-hidden flex flex-col border border-[#1c1c1f] rounded-2xl bg-[#111114]">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`relative max-w-[85%] group ${m.role === 'user' ? 'text-right' : 'text-left'}`}>
-                <div className={`inline-block p-4 rounded-2xl ${
-                  m.role === 'user' 
-                    ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white shadow-lg' 
-                    : 'glass-dark text-white border-l-2 border-l-[var(--primary)]'
-                }`}>
-                  <p className="text-sm font-medium leading-relaxed">{m.content}</p>
-                </div>
-                {m.role === 'assistant' && (
-                    <div className="mt-1 ml-2 text-[8px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">
-                        Cal AI • Science-Backed
-                    </div>
-                )}
+              <div className={`max-w-[85%] p-3 px-4 rounded-2xl text-[14px] leading-relaxed ${
+                m.role === 'user' 
+                  ? 'bg-white text-black font-medium' 
+                  : 'bg-[#1c1c1f] text-[#8a8a8e]'
+              }`}>
+                {m.content}
               </div>
             </div>
           ))}
           {loading && (
             <div className="flex justify-start">
-              <div className="glass-dark p-4 rounded-2xl flex items-center gap-3">
-                <div className="flex gap-1">
-                    <div className="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-[var(-- primary)] rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                    <div className="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
-                </div>
-                <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">AI is analyzing...</span>
+              <div className="bg-[#1c1c1f] p-3 px-4 rounded-xl flex items-center gap-2">
+                <Loader2 size={14} className="animate-spin text-[#4c4c50]" />
+                <span className="text-[12px] text-[#4c4c50]">Thinking</span>
               </div>
             </div>
           )}
         </div>
 
-        <form onSubmit={handleSend} className="p-4 m-4 glass rounded-2xl flex gap-3 items-center ring-1 ring-white/5 bg-white/[0.02]">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask anything about your plan..."
-            className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-white/20"
-          />
-          <button 
-            type="submit" 
-            disabled={loading || !input.trim()}
-            className="w-10 h-10 rounded-xl bg-[var(--primary)] text-black flex items-center justify-center disabled:opacity-50 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[var(--primary-glow)]"
-          >
-            <Send size={18} />
-          </button>
+        <form onSubmit={handleSend} className="p-3 border-t border-[#1c1c1f]">
+          <div className="flex bg-[#1c1c1f] rounded-xl overflow-hidden px-1 py-1 pr-2 items-center">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Message..."
+              className="flex-1 bg-transparent border-none outline-none font-medium px-3 text-sm h-10 text-white placeholder:text-[#4c4c50]"
+            />
+            <button 
+              type="submit" 
+              disabled={loading || !input.trim()}
+              className="w-10 h-10 rounded-lg bg-white text-black flex items-center justify-center disabled:opacity-30 transition-all active:scale-95"
+            >
+              <Send size={16} />
+            </button>
+          </div>
         </form>
       </div>
-
-      <style jsx>{`
-        .glass-dark {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .animate-bounce {
-            animation: bounce 0.6s infinite alternate;
-        }
-        @keyframes bounce { to { opacity: 0.3; transform: translateY(-4px); } }
-      `}</style>
     </div>
   );
 }
