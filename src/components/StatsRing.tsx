@@ -44,8 +44,9 @@ export default function StatsRing({ label, value, total, color, size = 160 }: St
         />
       </svg>
       <div className="stats-content">
-        <span className="stats-value">{Math.round(value)}</span>
-        <span className="stats-label">{label}</span>
+        <span className="stats-value">{value === 0 ? Math.round(total) : Math.round(value)}</span>
+        <span className="stats-label">{value === 0 ? 'Target' : label}</span>
+        {value !== 0 && <span className="text-[10px] opacity-50">of {Math.round(total)}</span>}
       </div>
 
       <style jsx>{`
@@ -60,21 +61,22 @@ export default function StatsRing({ label, value, total, color, size = 160 }: St
           display: flex;
           flex-direction: column;
           align-items: center;
+          text-align: center;
         }
         .stats-value {
-          font-size: 28px;
+          font-size: 32px;
           font-weight: 800;
           color: white;
           line-height: 1;
         }
         .stats-label {
-          font-size: 12px;
+          font-size: 10px;
           color: var(--text-secondary);
           text-transform: uppercase;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.15em;
           margin-top: 4px;
         }
-        svg { transform: rotate(-90deg); }
+        svg { transform: rotate(-90deg); filter: drop-shadow(0 0 8px ${color}44); }
       `}</style>
     </div>
   );

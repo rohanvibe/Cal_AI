@@ -59,15 +59,7 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
 
 export async function calculateNutritionGoals(userStats: any) {
   if (!process.env.GEMINI_API_KEY) {
-    console.log("Mocking AI nutrition calculation...");
-    return {
-      dailyCalories: 2250,
-      protein: 160,
-      carbs: 250,
-      fats: 75,
-      suggestedGoal: "Lean Muscle Gain",
-      aiReasoning: "Based on your activity level and height, a slight surplus will help build strength while maintaining health."
-    };
+    throw new Error("GEMINI_API_KEY is not configured in environment variables.");
   }
   const prompt = `
     Act as a professional sports performance nutritionist and fitness coach.
@@ -109,15 +101,7 @@ export async function calculateNutritionGoals(userStats: any) {
 
 export async function generateWorkout(userStats: any) {
   if (!process.env.GEMINI_API_KEY) {
-    console.log("Mocking workout generation...");
-    return {
-      planName: "Full Body Strength",
-      exercises: [
-        { name: "Dumbbell Squats", sets: 3, reps: "12", muscle: "Quads", instructions: "Keep back straight, feet shoulder width." },
-        { name: "Push Ups", sets: 3, reps: "15", muscle: "Chest/Triceps", instructions: "Maintain core tension." },
-        { name: "Plank", sets: 3, reps: "60s", muscle: "Core", instructions: "Don't drop your hips." }
-      ]
-    };
+    throw new Error("GEMINI_API_KEY is not configured.");
   }
   const prompt = `
     Generate a personalized workout plan for a user with these stats:

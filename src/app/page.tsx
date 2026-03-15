@@ -63,15 +63,15 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <header className="flex justify-between items-center py-4 animate-fade-in">
+      <header className="flex justify-between items-start py-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, {profile.name}</h1>
-          <p className="text-[var(--text-secondary)] text-sm">
-            AI Plan: {profile.suggestedGoal}
+          <h1 className="text-2xl font-bold">Hi, {profile.name}</h1>
+          <p className="text-[var(--text-secondary)] text-xs uppercase tracking-widest mt-1">
+            {profile.suggestedGoal || "Custom Plan"} / {profile.activity}
           </p>
         </div>
-        <div className="glass p-2">
-          <Trophy className="text-[var(--accent)]" size={20} />
+        <div className="glass p-2 bg-[var(--primary-glow)] border-[var(--primary)]/30">
+          <Activity className="text-[var(--primary)]" size={20} />
         </div>
       </header>
 
@@ -82,27 +82,33 @@ export default function Home() {
         </div>
         
         <StatsRing 
-          label="Calories" 
+          label="Daily Calories" 
           value={stats.calories} 
           total={stats.goal} 
           color="var(--primary)" 
-          size={180}
+          size={200}
         />
 
-        <div className="flex justify-between w-full mt-4">
+        <div className="flex justify-between w-full mt-6 px-4">
           <div className="flex flex-col items-center">
-            <span className="text-[var(--primary)] font-bold">{stats.protein}g</span>
-            <span className="text-xs text-[var(--text-secondary)]">Protein</span>
+            <span className="text-[var(--primary)] text-lg font-black">{stats.pGoal}g</span>
+            <span className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-tighter">Protein</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[var(--secondary)] font-bold">{stats.carbs}g</span>
-            <span className="text-xs text-[var(--text-secondary)]">Carbs</span>
+            <span className="text-[var(--secondary)] text-lg font-black">{stats.cGoal}g</span>
+            <span className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-tighter">Carbs</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[var(--accent)] font-bold">{stats.fats}g</span>
-            <span className="text-xs text-[var(--text-secondary)]">Fats</span>
+            <span className="text-[var(--accent)] text-lg font-black">{stats.fGoal}g</span>
+            <span className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-tighter">Fats</span>
           </div>
         </div>
+      </section>
+
+      {/* Original Goal Display */}
+      <section className="glass p-4 animate-fade-in bg-white/[0.02]">
+        <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Your Ambition</p>
+        <p className="text-sm italic text-white/90 mt-1">"{profile.goal}"</p>
       </section>
 
       {/* Quick Actions */}
