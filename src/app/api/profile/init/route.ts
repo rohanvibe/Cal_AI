@@ -3,7 +3,6 @@ import { calculateNutritionGoals } from "@/lib/gemini";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("Profile Init: Key present =", !!process.env.GEMINI_API_KEY);
     const userStats = await req.json();
     const aiCalculations = await calculateNutritionGoals(userStats);
     

@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Helper to get the model with the current API key from environment
 function getAIModel(modelName: string) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY is not defined in environment variables.");
   }
@@ -10,23 +10,24 @@ function getAIModel(modelName: string) {
   return genAI.getGenerativeModel({ model: modelName });
 }
 
+// User specified using Gemini 2.5 Flash
+const DEFAULT_MODEL = "gemini-2.5-flash";
+
 export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
   if (!process.env.GEMINI_API_KEY) {
-      // Return mock data if no key for local testing convenience 
-      // (though user wants real AI, we keep this as fallback for safety)
       return {
-        name: "Mock Healthy Bowl",
+        name: "Demo Meal",
         calories: 500,
         protein: 30,
         carbs: 50,
         fats: 20,
-        ingredients: ["Mock Quinoa", "Mock Tofu"],
+        ingredients: ["Mock Quinoa"],
         rating: 8,
-        tips: "Add a real API key to see actual AI analysis."
+        tips: "Add your API key to see actual AI analysis."
       };
   }
   
-  const model = getAIModel("gemini-1.5-flash");
+  const model = getAIModel(DEFAULT_MODEL);
   const prompt = `
     Analyze this meal image. 
     Provide:
@@ -36,7 +37,7 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
     4. Main ingredients.
     5. Health rating (1-10).
     6. Tips for improvement.
-    Return ONLY JSON format like this:
+    Return ONLY JSON format:
     {
       "name": "string",
       "calories": number,
@@ -66,7 +67,7 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
 }
 
 export async function calculateNutritionGoals(userStats: any) {
-  const model = getAIModel("gemini-1.5-pro");
+  const model = getAIModel(DEFAULT_MODEL);
   const prompt = `
     Act as a professional sports performance nutritionist and fitness coach.
     Based on the following user profile and their specific ambition, calculate their targets.
@@ -106,7 +107,7 @@ export async function calculateNutritionGoals(userStats: any) {
 }
 
 export async function generateWorkout(userStats: any) {
-  const model = getAIModel("gemini-1.5-pro");
+  const model = getAIModel(DEFAULT_MODEL);
   const prompt = `
     Generate a personalized workout plan for a user with these stats:
     ${JSON.stringify(userStats)}
