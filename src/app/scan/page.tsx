@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { Camera, RefreshCw, Upload, Check, X, AlertCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { Camera, RefreshCw, Upload, Check, X, AlertCircle, Sparkles, Utensils } from "lucide-react";
 
 export default function ScanPage() {
   const [image, setImage] = useState<string | null>(null);
@@ -42,22 +42,33 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 h-full min-h-[80vh]">
-      <header className="py-4">
-        <h1 className="text-2xl">AI Meal Scanner</h1>
-        <p className="text-[var(--text-secondary)] text-sm">Snap a photo to get instant nutrition data.</p>
+    <div className="flex flex-col gap-6 h-full min-h-[80vh] pb-10">
+      <header className="py-6 pt-10">
+        <div className="flex items-center gap-2 mb-1 text-[var(--primary)] font-black uppercase tracking-[0.2em] text-[10px]">
+            <Utensils size={12} />
+            <span>Optic Engine</span>
+        </div>
+        <h1 className="text-3xl font-black italic uppercase tracking-tighter">Meal Scan</h1>
+        <p className="text-[var(--text-secondary)] text-xs mt-1 font-medium">Verify your nutrition with computer vision.</p>
       </header>
 
       {!image ? (
         <div 
           onClick={() => fileInputRef.current?.click()}
-          className="flex-1 glass border-dashed border-2 border-[var(--card-border)] flex flex-col items-center justify-center gap-4 cursor-pointer min-h-[300px]"
+          className="flex-1 glass border-dashed border-2 border-white/5 bg-white/[0.01] flex flex-col items-center justify-center gap-6 cursor-pointer min-h-[400px] rounded-[48px] group active:scale-[0.98] transition-all"
         >
-          <div className="w-20 h-20 rounded-full bg-[var(--primary-glow)] flex items-center justify-center text-[var(--primary)] animate-pulse">
-            <Camera size={40} />
+          <div className="relative">
+            <div className="w-24 h-24 rounded-[32px] bg-[var(--primary-glow)] flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform duration-500">
+                <Camera size={44} />
+            </div>
+            <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-white shadow-lg">
+                <Sparkles size={16} />
+            </div>
           </div>
-          <span className="font-semibold">Tap to Scan Meal</span>
-          <span className="text-xs text-[var(--text-secondary)]">Supported: JPEG, PNG</span>
+          <div className="text-center">
+            <span className="text-lg font-black italic uppercase tracking-tighter block mb-1">Tap to Capture</span>
+            <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">AI analysis of ingredients</span>
+          </div>
           <input 
             type="file" 
             accept="image/*" 
@@ -69,12 +80,12 @@ export default function ScanPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-6 animate-fade-in">
-          <div className="relative glass p-2 overflow-hidden rounded-3xl aspect-[4/3]">
-            <img src={image} alt="Meal preview" className="w-full h-full object-cover rounded-2xl" />
+          <div className="relative glass p-3 border-none bg-black/40 overflow-hidden rounded-[40px] shadow-2xl">
+            <img src={image} alt="Meal preview" className="w-full aspect-video object-cover rounded-[32px]" />
             {!result && !loading && (
               <button 
                 onClick={reset}
-                className="absolute top-4 right-4 bg-black/50 p-2 rounded-full text-white backdrop-blur-md"
+                className="absolute top-6 right-6 glass p-3 rounded-full text-white bg-black/40 hover:bg-black/60 transition-colors border-none"
               >
                 <X size={20} />
               </button>
@@ -85,58 +96,60 @@ export default function ScanPage() {
             <button 
               onClick={analyzeMeal}
               disabled={loading}
-              className="btn-primary w-full h-14"
+              className="btn-primary w-full h-16 rounded-[24px] flex items-center justify-center gap-3"
             >
-              {loading ? <RefreshCw className="animate-spin" /> : <Upload size={20} />}
-              {loading ? "Analyzing..." : "Analyze Meal"}
+              {loading ? <RefreshCw className="animate-spin" size={24} /> : <Upload size={24} />}
+              <span className="font-black italic uppercase tracking-tighter text-lg">{loading ? "Synchronizing..." : "Analyze Biological Profile"}</span>
             </button>
           ) : (
-            <div className="flex flex-col gap-4 animate-fade-in pb-10">
-              <div className="glass p-5 border-l-4 border-l-[var(--accent)]">
-                <div className="flex justify-between items-start mb-4">
+            <div className="flex flex-col gap-6 animate-fade-in pb-10">
+              <div className="glass p-8 rounded-[40px] bg-gradient-to-br from-white/[0.03] to-transparent border-none">
+                <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h2 className="text-xl font-bold">{result.name}</h2>
-                    <div className="flex gap-2 mt-1">
-                      {result.ingredients?.slice(0, 3).map((ing: string) => (
-                        <span key={ing} className="text-[10px] bg-[var(--card-border)] px-2 py-0.5 rounded-full text-[var(--text-secondary)]">
+                    <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[var(--primary)]">{result.name}</h2>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {result.ingredients?.slice(0, 4).map((ing: string) => (
+                        <span key={ing} className="text-[9px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-3 py-1.5 rounded-full text-[var(--text-secondary)]">
                           {ing}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-black text-[var(--primary)]">{result.calories}</span>
-                    <p className="text-[10px] text-[var(--text-secondary)] uppercase">Calories</p>
+                  <div className="text-right glass p-4 rounded-3xl bg-white/[0.02] border-white/5">
+                    <span className="text-3xl font-black italic tracking-tighter text-white">{result.calories}</span>
+                    <p className="text-[9px] text-[var(--text-secondary)] font-black uppercase tracking-widest mt-1">Total Cal</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 py-4 border-y border-[var(--card-border)]">
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{result.protein}g</p>
-                    <p className="text-[10px] text-[var(--text-secondary)] uppercase">Protein</p>
+                <div className="grid grid-cols-3 gap-3 py-6 border-y border-white/5">
+                  <div className="flex flex-col items-center">
+                    <p className="text-xl font-black italic tracking-tighter">{result.protein}g</p>
+                    <p className="text-[8px] text-[var(--text-secondary)] font-black uppercase tracking-widest mt-1">Protein</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{result.carbs}g</p>
-                    <p className="text-[10px] text-[var(--text-secondary)] uppercase">Carbs</p>
+                  <div className="flex flex-col items-center">
+                    <p className="text-xl font-black italic tracking-tighter">{result.carbs}g</p>
+                    <p className="text-[8px] text-[var(--text-secondary)] font-black uppercase tracking-widest mt-1">Carbs</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{result.fats}g</p>
-                    <p className="text-[10px] text-[var(--text-secondary)] uppercase">Fats</p>
+                  <div className="flex flex-col items-center">
+                    <p className="text-xl font-black italic tracking-tighter">{result.fats}g</p>
+                    <p className="text-[8px] text-[var(--text-secondary)] font-black uppercase tracking-widest mt-1">Fats</p>
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-start gap-2 bg-[var(--primary-glow)] p-3 rounded-xl border border-[var(--primary)]/20">
-                  <AlertCircle size={16} className="text-[var(--primary)] mt-1 shrink-0" />
+                <div className="mt-6 flex items-start gap-4 glass-tip p-5 rounded-[24px]">
+                  <div className="w-10 h-10 rounded-2xl bg-[var(--primary-glow)] flex items-center justify-center text-[var(--primary)] shrink-0">
+                    <AlertCircle size={24} />
+                  </div>
                   <div>
-                    <p className="text-xs font-bold text-[var(--primary)]">HEALTH TIPS</p>
-                    <p className="text-xs text-white/80 leading-relaxed mt-1">{result.tips}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[var(--primary)] mb-1">AI Health Insight</p>
+                    <p className="text-xs text-white/80 leading-relaxed font-medium">{result.tips}</p>
                   </div>
                 </div>
 
-                <div className="mt-4 flex gap-3">
-                  <button onClick={reset} className="flex-1 glass p-3 text-sm font-semibold">Cancel</button>
-                  <button className="flex-[2] btn-primary h-12 flex items-center justify-center gap-2">
-                    <Check size={18} /> Add to Log
+                <div className="mt-8 flex gap-3">
+                  <button onClick={reset} className="flex-1 glass p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg">Retake</button>
+                  <button className="flex-[2] btn-primary h-14 rounded-2xl flex items-center justify-center gap-2">
+                    <Check size={20} /> <span className="font-black italic uppercase tracking-tighter">Add to Log</span>
                   </button>
                 </div>
               </div>
@@ -146,49 +159,14 @@ export default function ScanPage() {
       )}
 
       <style jsx>{`
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .flex-1 { flex: 1; }
-        .gap-6 { gap: 24px; }
-        .gap-4 { gap: 16px; }
-        .gap-2 { gap: 8px; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .text-2xl { font-size: 1.5rem; font-weight: 700; }
-        .text-xl { font-size: 1.25rem; font-weight: 700; }
-        .text-lg { font-size: 1.125rem; font-weight: 700; }
-        .text-sm { font-size: 0.875rem; }
-        .text-xs { font-size: 0.75rem; }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .h-full { height: 100%; }
-        .aspect-[4/3] { aspect-ratio: 4/3; }
-        .object-cover { object-fit: cover; }
-        .rounded-3xl { border-radius: 1.5rem; }
-        .rounded-2xl { border-radius: 1rem; }
-        .rounded-xl { border-radius: 0.75rem; }
-        .rounded-full { border-radius: 9999px; }
-        .border-dashed { border-style: dashed; }
-        .border-2 { border-width: 2px; }
-        .cursor-pointer { cursor: pointer; }
-        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
-        .hidden { display: none; }
+        .glass-tip {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.1);
+        }
         .animate-spin { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .grid { display: grid; }
-        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-        .py-0.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
-        .p-5 { padding: 1.25rem; }
-        .p-4 { padding: 1rem; }
-        .p-3 { padding: 0.75rem; }
-        .p-2 { padding: 0.5rem; }
-        .shrink-0 { flex-shrink: 0; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-1 { margin-top: 0.25rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .border-y { border-top-width: 1px; border-bottom-width: 1px; }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
       `}</style>
     </div>
   );

@@ -25,12 +25,14 @@ export default function Navigation() {
           <Link 
             key={item.path} 
             href={item.path}
-            className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 ${
-              isActive ? 'text-[var(--primary)] scale-110' : 'text-[var(--text-secondary)]'
+            className={`flex flex-col items-center justify-center gap-1 transition-all duration-500 ${
+              isActive ? 'active-item' : 'inactive-item'
             }`}
           >
-            <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-            <span className="text-[10px] font-medium uppercase tracking-wider">{item.label}</span>
+            <div className={`icon-container ${isActive ? 'active-icon' : ''}`}>
+               <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
           </Link>
         );
       })}
@@ -40,7 +42,7 @@ export default function Navigation() {
           display: flex;
           justify-content: space-around;
           align-items: center;
-          padding: 10px 0;
+          padding: 12px 10px 30px;
           position: fixed;
           bottom: 0;
           left: 0;
@@ -51,7 +53,38 @@ export default function Navigation() {
         .flex-col { flex-direction: column; }
         .items-center { align-items: center; }
         .justify-center { justify-content: center; }
-        .gap-1 { gap: 4px; }
+        .gap-1 { gap: 6px; }
+        
+        .icon-container {
+            padding: 8px;
+            border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .active-icon {
+            background: var(--primary-glow);
+            color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: translateY(-4px);
+        }
+
+        .active-item span {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        .inactive-item {
+            color: var(--text-secondary);
+        }
+        
+        .inactive-item span {
+            opacity: 0.6;
+        }
+
+        .inactive-item:hover .icon-container {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
       `}</style>
     </nav>
   );

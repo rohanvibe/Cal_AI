@@ -1,7 +1,5 @@
 "use client";
 
-import React from 'react';
-
 interface StatsRingProps {
   label: string;
   value: number;
@@ -10,73 +8,85 @@ interface StatsRingProps {
   size?: number;
 }
 
-export default function StatsRing({ label, value, total, color, size = 160 }: StatsRingProps) {
-  const percentage = Math.min((value / total) * 100, 100);
-  const strokeWidth = 12;
+export default function StatsRing({ label, value, total, color, size = 180 }: StatsRingProps) {
+  const strokeWidth = size * 0.08;
   const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
+  const circumference = 2 * Math.PI * radius;
+  const percentage = total > 0 ? (value / total) * 100 : 0;
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="stats-ring-container animate-fade-in">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Background Track */}
+    <div className="stats-ring-container animate-fade-in" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[-90deg]">
+        {/* Background Track with glass effect */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(255, 255, 255, 0.05)"
-          strokeWidth={strokeWidth}
           fill="transparent"
+          stroke="rgba(255, 255, 255, 0.03)"
+          strokeWidth={strokeWidth}
         />
-        {/* Progress Fill */}
+        
+        {/* Progress Stroke with Gradient and Glow */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
+          fill="transparent"
           stroke={color}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          fill="transparent"
-          style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
+          className="transition-all duration-1000 ease-out"
+          style={{ 
+              filter: `drop-shadow(0 0 8px ${color}88)`,
+          }}
         />
+
+        {/* Inner Gradient for "Premium" look */}
+        <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="var(--primary)" />
+                <stop offset="100%" stopColor="var(--secondary)" />
+            </linearGradient>
+        </defs>
       </svg>
-      <div className="stats-content">
-        <span className="stats-value">{value === 0 ? Math.round(total) : Math.round(value)}</span>
-        <span className="stats-label">{value === 0 ? 'Target' : label}</span>
-        {value !== 0 && <span className="text-[10px] opacity-50">of {Math.round(total)}</span>}
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">{label}</span>
+        <div className="flex items-baseline gap-1">
+            <span className="text-4xl font-black italic tracking-tighter transition-all duration-500">
+                {Math.round(value)}
+            </span>
+            <span className="text-xs font-bold opacity-30 italic">/ {total}</span>
+        </div>
+        <div className="mt-2 text-[10px] font-black italic text-[var(--accent)] tracking-widest bg-[var(--accent)]/10 px-3 py-1 rounded-full uppercase">
+            {100 - Math.round(percentage)}% TO GO
+        </div>
       </div>
 
       <style jsx>{`
         .stats-ring-container {
           position: relative;
           display: flex;
+          align-items: center;
           justify-content: center;
-          align-items: center;
         }
-        .stats-content {
-          position: absolute;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
+        .rotate-\[-90deg\] {
+          transform: rotate(-90deg);
         }
-        .stats-value {
-          font-size: 32px;
-          font-weight: 800;
-          color: white;
-          line-height: 1;
+        .transition-all {
+          transition-property: all;
         }
-        .stats-label {
-          font-size: 10px;
-          color: var(--text-secondary);
-          text-transform: uppercase;
-          letter-spacing: 0.15em;
-          margin-top: 4px;
+        .duration-1000 {
+          transition-duration: 1000ms;
         }
-        svg { transform: rotate(-90deg); filter: drop-shadow(0 0 8px ${color}44); }
+        .text-4xl {
+          font-size: 2.25rem;
+          line-height: 2.5rem;
+        }
       `}</style>
     </div>
   );

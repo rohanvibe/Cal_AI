@@ -74,7 +74,7 @@ export async function calculateNutritionGoals(userStats: any) {
     
     USER PROFILE:
     - Name: ${userStats.name}
-    - Age: ${userStats.age} (CRITICAL: Adjust recommendations based on this age. If the user is a child or adolescent, prioritize growth and safety over aggressive performance.)
+    - Age: ${userStats.age} (CRITICAL: Adjust recommendations based on this age.)
     - Weight: ${userStats.weight}kg
     - Height: ${userStats.height}cm
     - Activity Level: ${userStats.activity}
@@ -86,7 +86,7 @@ export async function calculateNutritionGoals(userStats: any) {
     1. Calculate Daily Calorie Target (ensure safety for their specific age).
     2. Define Macros: Protein, Carbs, Fats (in grams).
     3. Generate a Plan Name.
-    4. Provide AI Reasoning explaining why these numbers are safe and effective for someone who is ${userStats.age} years old with their goals.
+    4. Provide AI Reasoning.
     
     Return ONLY JSON:
     {
@@ -113,10 +113,6 @@ export async function generateWorkout(userStats: any, constraints: string = "") 
     USER STATS: ${JSON.stringify(userStats)}
     USER CONSTRAINTS/EQUIPMENT: "${constraints || "No specific constraints"}"
     
-    AGE SENSITIVITY: The user is ${userStats.age} years old. 
-    - If under 18: Focus on mobility, technique, and bodyweight exercises. Avoid heavy lifting that impacts growth.
-    - If adult: Standard fitness protocols.
-    
     Include 5 exercises with sets, reps, and target muscle groups. 
     
     Return ONLY JSON format:
@@ -138,31 +134,27 @@ export async function generateWorkout(userStats: any, constraints: string = "") 
 export async function chatWithAI(userProfile: any, messages: { role: 'user' | 'assistant', content: string }[]) {
   const model = getAIModel(DEFAULT_MODEL);
   
-  const systemInstruction = `
-    You are Cal AI, a friendly and professional fitness/nutrition mentor.
-    User Profile: ${JSON.stringify(userProfile)}
-    
-    Your tone: Encouraging, concise, and safety-first.
-    Important: The user is ${userProfile.age} years old. Always provide age-appropriate advice. 
-    Never suggest dangerous supplements or extreme diets.
-    
-    Stay in character. If asked about non-fitness topics, politely steer them back to health and wellness.
-  `;
+  // Use a simpler approach for chat with explicit system instruction prefix
+  const systemInstruction = `YOU ARE CAL AI MENTOR. 
+USER PROFILE: ${JSON.stringify(userProfile)}. 
+DIRECTIONS: Stay in character. Provide age-appropriate, science-based health advice for a ${userProfile.age} year old. Be brief/concise.`;
+
+  // Filter messages to ensure they alternate correctly for startChat
+  const chatHistory = messages.slice(0, -1).map(m => ({
+    role: m.role === 'user' ? 'user' : 'model',
+    parts: [{ text: m.content }]
+  }));
 
   const chat = model.startChat({
-    history: messages.slice(0, -1).map(m => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }]
-    })),
+    history: chatHistory,
     generationConfig: {
       maxOutputTokens: 500,
     },
   });
 
   const lastMessage = messages[messages.length - 1].content;
-  const fullPrompt = `${systemInstruction}\n\nUser Question: ${lastMessage}`;
-  
-  const result = await chat.sendMessage(fullPrompt);
-  const response = await result.response;
-  return response.text();
+  // Prefix the last message with the system instruction if it's the start
+  const response = await chat.sendMessage(`${systemInstruction}\n\nUSER QUESTION: ${lastMessage}`);
+  const result = await response.response;
+  return result.text();
 }
