@@ -25,13 +25,16 @@ export default function Home() {
     if (savedProfile) {
       const data = JSON.parse(savedProfile);
       setProfile(data);
-      setStats(prev => ({
-        ...prev,
-        goal: data.dailyCalories,
-        pGoal: data.protein,
-        cGoal: data.carbs,
-        fGoal: data.fats
-      }));
+      setStats({
+        calories: 0, // Current intake starts at 0
+        goal: data.dailyCalories || 2000,
+        protein: 0,
+        pGoal: data.protein || 150,
+        carbs: 0,
+        cGoal: data.carbs || 200,
+        fats: 0,
+        fGoal: data.fats || 70
+      });
     }
     setLoading(false);
   }, []);
@@ -39,13 +42,16 @@ export default function Home() {
   const handleOnboardingComplete = (data: any) => {
     localStorage.setItem('cal-ai-profile', JSON.stringify(data));
     setProfile(data);
-    setStats(prev => ({
-      ...prev,
-      goal: data.dailyCalories,
-      pGoal: data.protein,
-      cGoal: data.carbs,
-      fGoal: data.fats
-    }));
+    setStats({
+      calories: 0,
+      goal: data.dailyCalories || 2000,
+      protein: 0,
+      pGoal: data.protein || 150,
+      carbs: 0,
+      cGoal: data.carbs || 200,
+      fats: 0,
+      fGoal: data.fats || 70
+    });
   };
 
   if (loading) return null;

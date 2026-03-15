@@ -70,14 +70,24 @@ export async function calculateNutritionGoals(userStats: any) {
     };
   }
   const prompt = `
-    Act as a professional sports nutritionist. Based on these user stats:
-    ${JSON.stringify(userStats)}
-    Calculate their optimal daily:
-    1. Calorie target (TDEE adjustment).
-    2. Protein (grams).
-    3. Carbohydrates (grams).
-    4. Fats (grams).
-    5. A suggested primary fitness goal based on their BMI and activity.
+    Act as a professional sports performance nutritionist and fitness coach.
+    Based on the following user profile and their specific ambition, calculate their targets.
+    
+    USER PROFILE:
+    - Name: ${userStats.name}
+    - Age: ${userStats.age}
+    - Weight: ${userStats.weight}kg
+    - Height: ${userStats.height}cm
+    - Activity Level: ${userStats.activity}
+    
+    USER'S SPECIFIC AMBITION:
+    "${userStats.goal}"
+    
+    TASKS:
+    1. Calculate optimal Daily Calorie Target to achieve this specific goal.
+    2. Define Macro breakdown: Protein, Carbs, Fats (in grams).
+    3. Generate a professional Name for this specific plan.
+    4. Provide a clear, professional "AI Reasoning" (2-3 sentences) explaining how these numbers specifically address their text goal.
     
     Return ONLY JSON:
     {

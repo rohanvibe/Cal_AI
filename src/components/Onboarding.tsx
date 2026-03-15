@@ -149,31 +149,23 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
           {step === 3 && (
             <div className="flex flex-col gap-4 animate-fade-in">
-              <h2 className="text-2xl font-bold">Your Goal</h2>
-              <p className="text-[var(--text-secondary)] text-sm">What do you want to achieve with Cal AI?</p>
+              <h2 className="text-2xl font-bold">Your Ambition</h2>
+              <p className="text-[var(--text-secondary)] text-sm">Tell Cal AI exactly what you want to achieve. Be as specific as you like.</p>
               
-              <div className="flex flex-col gap-3">
-                {[
-                    { id: 'loss', label: 'Weight Loss', desc: 'Burn fat and improve metabolism.' },
-                    { id: 'gain', label: 'Muscle Gain', desc: 'Build strength and size.' },
-                    { id: 'maintenance', label: 'Maintenance', desc: 'Stay healthy and balanced.' },
-                ].map((goal) => (
-                    <div 
-                        key={goal.id}
-                        onClick={() => setFormData({...formData, goal: goal.id})}
-                        className={`glass p-4 cursor-pointer transition-all border-2 ${
-                            formData.goal === goal.id ? 'border-[var(--primary)]' : 'border-transparent'
-                        }`}
-                    >
-                        <p className="font-bold">{goal.label}</p>
-                        <p className="text-xs text-[var(--text-secondary)]">{goal.desc}</p>
-                    </div>
-                ))}
+              <div className="input-group">
+                <label>Define Your Goal</label>
+                <textarea 
+                  required
+                  placeholder="e.g. I want to lose 5kg of fat while maintaining my current muscle mass and improving my stamina for a 5k run."
+                  value={formData.goal}
+                  onChange={(e) => setFormData({...formData, goal: e.target.value})}
+                  className="glass-input min-h-[120px] resize-none"
+                />
               </div>
 
               <div className="flex gap-3 mt-4">
                 <button type="button" onClick={prevStep} className="flex-1 glass p-3 text-sm">Back</button>
-                <button type="submit" className="flex-[2] btn-primary">Finish Setup</button>
+                <button type="submit" className="flex-[2] btn-primary">Analyze & Finish</button>
               </div>
             </div>
           )}
