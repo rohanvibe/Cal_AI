@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, ArrowLeft, Ruler, Scale, Activity, Target, Sparkles, User, Zap } from "lucide-react";
+import { ChevronRight, Ruler, Scale, Activity, Target } from "lucide-react";
 
 interface OnboardingProps {
   onComplete: (data: any) => void;
@@ -49,32 +49,34 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#0c0c0e] z-[2000] flex items-center justify-center p-6 animate-fade-in">
-      <div className="w-full max-w-sm flex flex-col gap-8">
+    <div className="fixed inset-0 bg-[#0c0c0e] z-[2000] flex items-center justify-center p-8 animate-fade-in">
+      <div className="w-full max-w-md flex flex-col gap-10">
         {loading ? (
-            <div className="flex flex-col items-center gap-6 py-10 text-center animate-fade-in">
-                <Activity size={32} className="text-white animate-pulse" />
+            <div className="flex flex-col items-center gap-8 py-10 text-center animate-fade-in">
+                <div className="relative">
+                    <Activity size={48} className="text-white animate-pulse" />
+                </div>
                 <div>
-                   <h2 className="text-xl font-semibold tracking-tight">Calculating Profile</h2>
-                   <p className="text-sm text-[#8a8a8e] mt-2">Customizing nutrition and workout models for your data.</p>
+                   <h2 className="text-3xl font-bold tracking-tight">Syncing Profile</h2>
+                   <p className="text-lg text-[#8a8a8e] mt-3 font-medium">Fine-tuning AI models for your biometrics...</p>
                 </div>
             </div>
         ) : (
             <>
-        <header className="flex flex-col gap-2">
-            <div className="flex gap-1 mb-2">
+        <header className="flex flex-col gap-4">
+            <div className="flex gap-2">
                 {[1, 2, 3].map(i => (
-                    <div key={i} className={`h-[2px] rounded-full transition-all duration-300 ${step >= i ? 'w-8 bg-white' : 'w-4 bg-[#1c1c1f]'}`}></div>
+                    <div key={i} className={`h-[3px] rounded-full transition-all duration-300 ${step >= i ? 'w-12 bg-white' : 'w-6 bg-[#222226]'}`}></div>
                 ))}
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-4xl font-bold tracking-tight mt-2">
                 {step === 1 && "Personal details"}
                 {step === 2 && "Physical metrics"}
                 {step === 3 && "Your ambition"}
             </h1>
         </header>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
           {step === 1 && (
             <div className="flex flex-col gap-4 animate-fade-in">
               <input 
@@ -93,7 +95,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 value={formData.age}
                 onChange={(e) => setFormData({...formData, age: e.target.value})}
               />
-              <button type="button" onClick={nextStep} className="btn-primary mt-4">
+              <button type="button" onClick={nextStep} className="btn-primary mt-6">
                 Continue
               </button>
             </div>
@@ -101,7 +103,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
           {step === 2 && (
             <div className="flex flex-col gap-4 animate-fade-in">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <input 
                   required 
                   type="number" 
@@ -121,7 +123,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               </div>
 
               <select 
-                className="glass-input"
+                className="glass-input appearance-none bg-[#1c1c21]"
                 value={formData.activity}
                 onChange={(e) => setFormData({...formData, activity: e.target.value})}
               >
@@ -131,9 +133,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <option value="active">Very Active (Daily)</option>
               </select>
 
-              <div className="flex gap-2 mt-4">
-                <button type="button" onClick={prevStep} className="flex-1 glass py-4 text-xs font-semibold uppercase tracking-wider">Back</button>
-                <button type="button" onClick={nextStep} className="flex-[2] btn-primary">Next</button>
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <button type="button" onClick={prevStep} className="glass py-5 text-sm font-bold uppercase tracking-widest bg-transparent border-[#222226] hover:bg-[#16161a] transition-all">Back</button>
+                <button type="button" onClick={nextStep} className="btn-primary">Next</button>
               </div>
             </div>
           )}
@@ -142,15 +144,15 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div className="flex flex-col gap-4 animate-fade-in">
               <textarea 
                 required
-                placeholder="Describe your health goal in detail..."
+                placeholder="Describe your health goal..."
                 value={formData.goal}
                 onChange={(e) => setFormData({...formData, goal: e.target.value})}
-                className="glass-input min-h-[120px] resize-none"
+                className="glass-input min-h-[160px] resize-none leading-relaxed"
               />
 
-              <div className="flex gap-2 mt-4">
-                <button type="button" onClick={prevStep} className="flex-1 glass py-4 text-xs font-semibold uppercase tracking-wider">Back</button>
-                <button type="submit" className="flex-[2] btn-primary">Finish Setup</button>
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <button type="button" onClick={prevStep} className="glass py-5 text-sm font-bold uppercase tracking-widest bg-transparent border-[#222226] hover:bg-[#16161a] transition-all">Back</button>
+                <button type="submit" className="btn-primary">Complete</button>
               </div>
             </div>
           )}
