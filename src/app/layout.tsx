@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Navigation from "@/components/Navigation";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,20 +13,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#00f2ff",
+};
+
 export const metadata: Metadata = {
   title: "Cal AI | Your Fitness Assistant",
   description: "Professional-grade AI fitness, nutrition, and workout assistant.",
   manifest: "/manifest.json",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover",
-  themeColor: "#00f2ff",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Cal AI",
   },
 };
-
-import Navigation from "@/components/Navigation";
 
 export default function RootLayout({
   children,
