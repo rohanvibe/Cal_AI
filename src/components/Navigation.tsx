@@ -27,7 +27,9 @@ export default function Navigation() {
             href={item.path}
             className={`nav-link ${isActive ? 'active' : ''}`}
           >
-            <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+            <div className={`nav-icon ${isActive ? 'active-bg' : ''}`}>
+                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+            </div>
             <span>{item.label}</span>
           </Link>
         );
@@ -38,7 +40,7 @@ export default function Navigation() {
           display: flex;
           justify-content: space-around;
           align-items: center;
-          padding: 12px 16px 32px;
+          padding: 16px 20px 40px;
           position: fixed;
           bottom: 0;
           left: 0;
@@ -46,31 +48,44 @@ export default function Navigation() {
           background: #0c0c0e;
           border-top: 1px solid #1c1c1f;
           z-index: 1000;
+          backdrop-filter: blur(20px);
         }
 
         .nav-link {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           color: #4c4c50;
           transition: all 0.2s ease;
           text-decoration: none !important;
           flex: 1;
         }
 
+        .nav-icon {
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .active-bg {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
         .nav-link span {
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 0.02em;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
 
         .nav-link.active {
           color: #ffffff;
         }
 
-        .nav-link:hover:not(.active) {
-          color: #8a8a8e;
+        .nav-link.active span {
+            color: #ffffff;
         }
       `}</style>
     </nav>

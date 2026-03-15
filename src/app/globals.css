@@ -43,76 +43,82 @@ body {
   padding: 32px 24px 120px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
 }
 
-/* Card Styling */
+/* 
+  FIX: Clear Button Identification
+  Buttons should look like SOLID blocks that are clearly interactive.
+*/
+.btn-primary {
+  background: var(--primary) !important;
+  color: #000 !important;
+  border: none;
+  padding: 18px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 20px -10px rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
 .glass {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  width: 100%;
-}
-
-/* Updated Button Styles */
-.btn-primary {
-  background: var(--primary);
-  color: #000;
-  border: none;
-  padding: 18px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-}
-
-.btn-primary:active {
-  transform: scale(0.98);
-  opacity: 0.9;
-}
-
-/* Premium Dynamic Input Field */
-.glass-input {
-  background: #1c1c21;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-  color: white;
-  width: 100%;
-  outline: none;
-  font-size: 16px;
-  font-family: var(--font-main);
   transition: all 0.3s ease;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 
+  FIX: Modern Message Field
+  Removing the 'vintage' look by using deep backgrounds, refined focus states, and rounded corners.
+*/
+.glass-input {
+  background: #1c1c21 !important;
+  border: 2px solid #2d2d33 !important;
+  border-radius: var(--radius-md) !important;
+  padding: 16px 20px !important;
+  color: white !important;
+  width: 100% !important;
+  outline: none !important;
+  font-size: 16px !important;
+  font-family: var(--font-main) !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
 }
 
 .glass-input:focus {
-  border-color: #4a4a4f;
-  background: #242429;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+  border-color: #5d5dff !important;
+  background: #25252b !important;
+  box-shadow: 0 0 0 4px rgba(93, 93, 255, 0.1) !important;
 }
 
-.glass-input::placeholder {
-  color: #5a5a5e;
+/* Heading hierarchy to prevent 'text looking like buttons' */
+h1, h2, h3, h4 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-/* Hide scrollbars */
 ::-webkit-scrollbar {
   display: none;
 }
