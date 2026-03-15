@@ -62,10 +62,10 @@ export default function ProfilePage() {
 
         <div className="glass p-4 divide-y divide-[var(--card-border)]">
             {[
-                { label: "Weight", value: `${profile.weight} kg`, key: "weight" },
-                { label: "Height", value: `${profile.height} cm`, key: "height" },
-                { label: "Goal", value: profile.goal.charAt(0).toUpperCase() + profile.goal.slice(1), key: "goal" },
-                { label: "Activity", value: profile.activity.charAt(0).toUpperCase() + profile.activity.slice(1), key: "activity" }
+                { label: "Weight", value: `${profile.weight || 0} kg`, key: "weight" },
+                { label: "Height", value: `${profile.height || 0} cm`, key: "height" },
+                { label: "Goal", value: (profile.suggestedGoal || profile.goal || "Maintenance"), key: "goal" },
+                { label: "Activity", value: (profile.activity || "moderate").charAt(0).toUpperCase() + (profile.activity || "moderate").slice(1), key: "activity" }
             ].map((item, i) => (
                 <div key={i} className="flex justify-between items-center py-4 first:pt-0 last:pb-0">
                     <span className="text-sm text-[var(--text-secondary)]">{item.label}</span>

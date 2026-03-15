@@ -67,7 +67,7 @@ export default function WorkoutPage() {
 
           <div className="flex flex-col gap-4">
             <h3 className="text-lg font-bold">Exercises</h3>
-            {workout.exercises.map((ex: any, idx: number) => (
+            {workout?.exercises?.map((ex: any, idx: number) => (
               <div key={idx} className="glass p-5 flex items-center justify-between group">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-[var(--card-border)] flex items-center justify-center text-sm font-bold text-[var(--secondary)]">

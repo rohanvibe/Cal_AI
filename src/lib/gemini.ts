@@ -53,7 +53,8 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
 
   const response = await result.response;
   const text = response.text();
-  return JSON.parse(text.replace(/```json|```/g, "").trim());
+  const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
+  return JSON.parse(cleanJson);
 }
 
 export async function calculateNutritionGoals(userStats: any) {
@@ -92,7 +93,8 @@ export async function calculateNutritionGoals(userStats: any) {
   const result = await workoutModel.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
-  return JSON.parse(text.replace(/```json|```/g, "").trim());
+  const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
+  return JSON.parse(cleanJson);
 }
 
 export async function generateWorkout(userStats: any) {
@@ -123,5 +125,6 @@ export async function generateWorkout(userStats: any) {
   const result = await workoutModel.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
-  return JSON.parse(text.replace(/```json|```/g, "").trim());
+  const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
+  return JSON.parse(cleanJson);
 }
