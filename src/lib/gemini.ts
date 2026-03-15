@@ -56,6 +56,45 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
   return JSON.parse(text.replace(/```json|```/g, "").trim());
 }
 
+export async function calculateNutritionGoals(userStats: any) {
+  if (!process.env.GEMINI_API_KEY) {
+    console.log("Mocking AI nutrition calculation...");
+    return {
+      dailyCalories: 2250,
+      protein: 160,
+      carbs: 250,
+      fats: 75,
+      suggestedGoal: "Lean Muscle Gain",
+      aiReasoning: "Based on your activity level and height, a slight surplus will help build strength while maintaining health."
+    };
+  }
+  const prompt = `
+    Act as a professional sports nutritionist. Based on these user stats:
+    ${JSON.stringify(userStats)}
+    Calculate their optimal daily:
+    1. Calorie target (TDEE adjustment).
+    2. Protein (grams).
+    3. Carbohydrates (grams).
+    4. Fats (grams).
+    5. A suggested primary fitness goal based on their BMI and activity.
+    
+    Return ONLY JSON:
+    {
+      "dailyCalories": number,
+      "protein": number,
+      "carbs": number,
+      "fats": number,
+      "suggestedGoal": "string",
+      "aiReasoning": "string"
+    }
+  `;
+
+  const result = await workoutModel.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  return JSON.parse(text.replace(/```json|```/g, "").trim());
+}
+
 export async function generateWorkout(userStats: any) {
   if (!process.env.GEMINI_API_KEY) {
     console.log("Mocking workout generation...");

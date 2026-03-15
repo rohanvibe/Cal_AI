@@ -2,27 +2,67 @@
 
 import { useState, useEffect } from "react";
 import StatsRing from "@/components/StatsRing";
+import Onboarding from "@/components/Onboarding";
 import { Flame, Target, Trophy, ChevronRight, Activity } from "lucide-react";
 
 export default function Home() {
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  
   const [stats, setStats] = useState({
-    calories: 1450,
-    goal: 2200,
-    protein: 85,
+    calories: 0,
+    goal: 2000,
+    protein: 0,
     pGoal: 150,
-    carbs: 160,
+    carbs: 0,
     cGoal: 200,
-    fats: 45,
+    fats: 0,
     fGoal: 70
   });
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem('cal-ai-profile');
+    if (savedProfile) {
+      const data = JSON.parse(savedProfile);
+      setProfile(data);
+      setStats(prev => ({
+        ...prev,
+        goal: data.dailyCalories,
+        pGoal: data.protein,
+        cGoal: data.carbs,
+        fGoal: data.fats
+      }));
+    }
+    setLoading(false);
+  }, []);
+
+  const handleOnboardingComplete = (data: any) => {
+    localStorage.setItem('cal-ai-profile', JSON.stringify(data));
+    setProfile(data);
+    setStats(prev => ({
+      ...prev,
+      goal: data.dailyCalories,
+      pGoal: data.protein,
+      cGoal: data.carbs,
+      fGoal: data.fats
+    }));
+  };
+
+  if (loading) return null;
+
+  if (!profile) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <header className="flex justify-between items-center py-4">
+      <header className="flex justify-between items-center py-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl">Good Morning, Rohan</h1>
-          <p className="text-[var(--text-secondary)] text-sm">You're 65% of the way to your goal!</p>
+          <h1 className="text-2xl font-bold">Welcome, {profile.name}</h1>
+          <p className="text-[var(--text-secondary)] text-sm">
+            AI Plan: {profile.suggestedGoal}
+          </p>
         </div>
         <div className="glass p-2">
           <Trophy className="text-[var(--accent)]" size={20} />
@@ -30,7 +70,7 @@ export default function Home() {
       </header>
 
       {/* Main Stats */}
-      <section className="glass p-6 flex flex-col items-center gap-4 relative overflow-hidden">
+      <section className="glass p-6 flex flex-col items-center gap-4 relative overflow-hidden animate-fade-in">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <Activity size={100} className="text-[var(--primary)]" />
         </div>
@@ -60,51 +100,28 @@ export default function Home() {
       </section>
 
       {/* Quick Actions */}
-      <section className="grid grid-cols-2 gap-4">
+      <section className="grid grid-cols-2 gap-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
         <div className="glass p-4 flex flex-col gap-2">
           <Flame className="text-orange-500" />
           <span className="text-sm font-semibold">Streak</span>
-          <span className="text-lg font-bold">12 Days</span>
+          <span className="text-lg font-bold">First Day!</span>
         </div>
         <div className="glass p-4 flex flex-col gap-2">
           <Target className="text-red-500" />
           <span className="text-sm font-semibold">Weight</span>
-          <span className="text-lg font-bold">78.5 kg</span>
+          <span className="text-lg font-bold">{profile.weight} kg</span>
         </div>
       </section>
 
       {/* AI Suggestion */}
-      <section className="glass p-4 border-l-4 border-l-[var(--primary)]">
+      <section className="glass p-4 border-l-4 border-l-[var(--primary)] animate-fade-in" style={{ animationDelay: '0.2s' }}>
         <h3 className="text-sm font-bold flex items-center gap-2">
           <Activity size={16} className="text-[var(--primary)]" />
-          AI INSIGHT
+          AI PLAN RATIONALE
         </h3>
         <p className="text-sm mt-2 text-[var(--text-secondary)]">
-          You're low on protein today. Consider adding a Greek yogurt snack after your workout!
+          {profile.aiReasoning}
         </p>
-      </section>
-
-      {/* Progress Cards */}
-      <section className="flex flex-col gap-3 pb-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg">Daily Log</h2>
-          <span className="text-sm text-[var(--primary)]">View All</span>
-        </div>
-        
-        {[1, 2].map((i) => (
-          <div key={i} className="glass p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[var(--card-border)] overflow-hidden">
-                <img src={`https://picsum.photos/seed/${i+10}/200`} alt="meal" className="w-full h-full object-cover" />
-              </div>
-              <div>
-                <h4 className="font-semibold">{i === 1 ? 'Quinoa Salad' : 'Protein Shake'}</h4>
-                <p className="text-xs text-[var(--text-secondary)]">{i === 1 ? 'Lunch • 450 kcal' : 'Snack • 180 kcal'}</p>
-              </div>
-            </div>
-            <ChevronRight size={18} className="text-[var(--text-secondary)]" />
-          </div>
-        ))}
       </section>
 
       <style jsx>{`
@@ -112,16 +129,13 @@ export default function Home() {
         .flex-col { flex-direction: column; }
         .gap-6 { gap: 24px; }
         .gap-4 { gap: 16px; }
-        .gap-3 { gap: 12px; }
-        .gap-2 { gap: 8px; }
         .items-center { align-items: center; }
         .justify-between { justify-content: space-between; }
-        .text-2xl { font-size: 1.5rem; line-height: 2rem; font-weight: 700; }
-        .text-lg { font-size: 1.125rem; font-weight: 600; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-lg { font-size: 1.125rem; }
         .text-sm { font-size: 0.875rem; }
         .text-xs { font-size: 0.75rem; }
         .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
         .grid { display: grid; }
         .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .p-6 { padding: 1.5rem; }
@@ -138,10 +152,6 @@ export default function Home() {
         .right-0 { right: 0; }
         .opacity-10 { opacity: 0.1; }
         .border-l-4 { border-left-width: 4px; }
-        .rounded-xl { border-radius: 0.75rem; }
-        .w-12 { width: 3rem; }
-        .h-12 { height: 3rem; }
-        .object-cover { object-fit: cover; }
       `}</style>
     </div>
   );
