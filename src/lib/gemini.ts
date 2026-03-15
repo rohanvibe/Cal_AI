@@ -69,24 +69,24 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
 export async function calculateNutritionGoals(userStats: any) {
   const model = getAIModel(DEFAULT_MODEL);
   const prompt = `
-    Act as a professional sports performance nutritionist and fitness coach.
-    Based on the following user profile and their specific ambition, calculate their targets.
+    Act as a professional health and fitness nutritionist. 
+    Analyze the user's profile and provide a personalized plan.
     
     USER PROFILE:
     - Name: ${userStats.name}
-    - Age: ${userStats.age}
+    - Age: ${userStats.age} (CRITICAL: Adjust recommendations based on this age. If the user is a child or adolescent, prioritize growth and safety over aggressive performance.)
     - Weight: ${userStats.weight}kg
     - Height: ${userStats.height}cm
     - Activity Level: ${userStats.activity}
     
-    USER'S SPECIFIC AMBITION:
+    USER'S AMBITION:
     "${userStats.goal}"
     
-    TASKS:
-    1. Calculate optimal Daily Calorie Target to achieve this specific goal.
-    2. Define Macro breakdown: Protein, Carbs, Fats (in grams).
-    3. Generate a professional Name for this specific plan.
-    4. Provide a clear, professional "AI Reasoning" (2-3 sentences) explaining how these numbers specifically address their text goal.
+    REQUIREMENTS:
+    1. Calculate Daily Calorie Target (ensure safety for their specific age).
+    2. Define Macros: Protein, Carbs, Fats (in grams).
+    3. Generate a Plan Name.
+    4. Provide AI Reasoning explaining why these numbers are safe and effective for someone who is ${userStats.age} years old with their goals.
     
     Return ONLY JSON:
     {
@@ -106,12 +106,19 @@ export async function calculateNutritionGoals(userStats: any) {
   return JSON.parse(cleanJson);
 }
 
-export async function generateWorkout(userStats: any) {
+export async function generateWorkout(userStats: any, constraints: string = "") {
   const model = getAIModel(DEFAULT_MODEL);
   const prompt = `
-    Generate a personalized workout plan for a user with these stats:
-    ${JSON.stringify(userStats)}
-    Include 5 exercises with sets, reps, and target muscle groups.
+    Generate a personalized workout plan for a user.
+    USER STATS: ${JSON.stringify(userStats)}
+    USER CONSTRAINTS/EQUIPMENT: "${constraints || "No specific constraints"}"
+    
+    AGE SENSITIVITY: The user is ${userStats.age} years old. 
+    - If under 18: Focus on mobility, technique, and bodyweight exercises. Avoid heavy lifting that impacts growth.
+    - If adult: Standard fitness protocols.
+    
+    Include 5 exercises with sets, reps, and target muscle groups. 
+    
     Return ONLY JSON format:
     {
       "planName": "string",
@@ -126,4 +133,36 @@ export async function generateWorkout(userStats: any) {
   const text = response.text();
   const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
   return JSON.parse(cleanJson);
+}
+
+export async function chatWithAI(userProfile: any, messages: { role: 'user' | 'assistant', content: string }[]) {
+  const model = getAIModel(DEFAULT_MODEL);
+  
+  const systemInstruction = `
+    You are Cal AI, a friendly and professional fitness/nutrition mentor.
+    User Profile: ${JSON.stringify(userProfile)}
+    
+    Your tone: Encouraging, concise, and safety-first.
+    Important: The user is ${userProfile.age} years old. Always provide age-appropriate advice. 
+    Never suggest dangerous supplements or extreme diets.
+    
+    Stay in character. If asked about non-fitness topics, politely steer them back to health and wellness.
+  `;
+
+  const chat = model.startChat({
+    history: messages.slice(0, -1).map(m => ({
+      role: m.role === 'user' ? 'user' : 'model',
+      parts: [{ text: m.content }]
+    })),
+    generationConfig: {
+      maxOutputTokens: 500,
+    },
+  });
+
+  const lastMessage = messages[messages.length - 1].content;
+  const fullPrompt = `${systemInstruction}\n\nUser Question: ${lastMessage}`;
+  
+  const result = await chat.sendMessage(fullPrompt);
+  const response = await result.response;
+  return response.text();
 }

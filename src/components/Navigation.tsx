@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Camera, Dumbbell, User } from 'lucide-react';
+import { Home, Camera, Dumbbell, User, MessageSquare } from 'lucide-react';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -10,6 +10,7 @@ export default function Navigation() {
   const navItems = [
     { label: 'Today', icon: Home, path: '/' },
     { label: 'Scan', icon: Camera, path: '/scan' },
+    { label: 'Chat', icon: MessageSquare, path: '/chat' },
     { label: 'Workout', icon: Dumbbell, path: '/workout' },
     { label: 'Profile', icon: User, path: '/profile' },
   ];

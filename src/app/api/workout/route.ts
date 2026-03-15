@@ -3,19 +3,17 @@ import { generateWorkout } from "@/lib/gemini";
 
 export async function POST(req: NextRequest) {
   try {
-    // In a real app, we'd fetch user stats from a DB here
-    const mockUserStats = {
-      goal: "muscle gain",
-      experience: "intermediate",
-      equipment: ["dumbbells", "bench", "pull-up bar"],
-      activityLevel: "moderate"
-    };
-
-    const result = await generateWorkout(mockUserStats);
+    const { profile, constraints } = await req.json();
     
-    return NextResponse.json(result);
-  } catch (error) {
+    if (!profile) {
+      return NextResponse.json({ error: "No profile provided" }, { status: 400 });
+    }
+
+    const workout = await generateWorkout(profile, constraints);
+    
+    return NextResponse.json(workout);
+  } catch (error: any) {
     console.error("Workout generation error:", error);
-    return NextResponse.json({ error: "Failed to generate workout" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to generate workout" }, { status: 500 });
   }
 }
