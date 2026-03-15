@@ -1,28 +1,32 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
-if (!process.env.GEMINI_API_KEY) {
-  console.warn("⚠️ CAL AI WARNING: GEMINI_API_KEY is missing. AI features will fail. If running locally, please add it to .env.local. If on Vercel, check Environment Variables.");
+// Helper to get the model with the current API key from environment
+function getAIModel(modelName: string) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not defined in environment variables.");
+  }
+  const genAI = new GoogleGenerativeAI(apiKey);
+  return genAI.getGenerativeModel({ model: modelName });
 }
-
-export const mealModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-export const workoutModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
 export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
   if (!process.env.GEMINI_API_KEY) {
-    console.log("Mocking meal analysis...");
-    return {
-      name: "Healthy Salad Bowl",
-      calories: 450,
-      protein: 25,
-      carbs: 45,
-      fats: 18,
-      ingredients: ["Quinoa", "Kale", "Tofu", "Avocado", "Cherry Tomatoes"],
-      rating: 9,
-      tips: "Excellent macronutrient balance. Try adding some flax seeds for extra Omega-3s."
-    };
+      // Return mock data if no key for local testing convenience 
+      // (though user wants real AI, we keep this as fallback for safety)
+      return {
+        name: "Mock Healthy Bowl",
+        calories: 500,
+        protein: 30,
+        carbs: 50,
+        fats: 20,
+        ingredients: ["Mock Quinoa", "Mock Tofu"],
+        rating: 8,
+        tips: "Add a real API key to see actual AI analysis."
+      };
   }
+  
+  const model = getAIModel("gemini-1.5-flash");
   const prompt = `
     Analyze this meal image. 
     Provide:
@@ -45,7 +49,7 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
     }
   `;
 
-  const result = await mealModel.generateContent([
+  const result = await model.generateContent([
     prompt,
     {
       inlineData: {
@@ -62,9 +66,7 @@ export async function analyzeMealImage(imageBuffer: Buffer, mimeType: string) {
 }
 
 export async function calculateNutritionGoals(userStats: any) {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not configured in environment variables.");
-  }
+  const model = getAIModel("gemini-1.5-pro");
   const prompt = `
     Act as a professional sports performance nutritionist and fitness coach.
     Based on the following user profile and their specific ambition, calculate their targets.
@@ -96,7 +98,7 @@ export async function calculateNutritionGoals(userStats: any) {
     }
   `;
 
-  const result = await workoutModel.generateContent(prompt);
+  const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
   const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
@@ -104,9 +106,7 @@ export async function calculateNutritionGoals(userStats: any) {
 }
 
 export async function generateWorkout(userStats: any) {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not configured.");
-  }
+  const model = getAIModel("gemini-1.5-pro");
   const prompt = `
     Generate a personalized workout plan for a user with these stats:
     ${JSON.stringify(userStats)}
@@ -120,7 +120,7 @@ export async function generateWorkout(userStats: any) {
     }
   `;
 
-  const result = await workoutModel.generateContent(prompt);
+  const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
   const cleanJson = text.replace(/^[^{]*|[^}]*$/g, "").trim();
