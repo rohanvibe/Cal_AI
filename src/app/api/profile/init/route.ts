@@ -10,8 +10,8 @@ export async function POST(req: NextRequest) {
         ...userStats,
         ...aiCalculations
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Profile initialization error:", error);
-    return NextResponse.json({ error: "Failed to initialize AI profile" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to initialize AI profile" }, { status: 500 });
   }
 }
