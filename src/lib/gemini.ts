@@ -2,6 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
+if (!process.env.GEMINI_API_KEY) {
+  console.warn("⚠️ CAL AI WARNING: GEMINI_API_KEY is missing. AI features will fail. If running locally, please add it to .env.local. If on Vercel, check Environment Variables.");
+}
+
 export const mealModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 export const workoutModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 

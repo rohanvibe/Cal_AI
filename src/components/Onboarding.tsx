@@ -33,11 +33,17 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to contact AI");
+      }
+
       const aiEnrichedData = await response.json();
       onComplete(aiEnrichedData);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("AI failed to calculate your plan. Please try again.");
+      alert(`AI Error: ${error.message}. Please check your API key and try again.`);
     } finally {
       setLoading(false);
     }
