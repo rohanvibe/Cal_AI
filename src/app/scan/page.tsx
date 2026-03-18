@@ -42,55 +42,59 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="flex flex-col gap-10 max-w-lg mx-auto w-full pt-10 pb-20 px-4">
-      <header className="py-6 flex justify-between items-center border-b border-white/5 px-2">
+    <div className="flex flex-col gap-6 max-w-lg mx-auto w-full pt-6 pb-20 px-4">
+      <header className="py-4 flex justify-between items-center border-b border-white/5 px-2">
         <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-[#bc13fe]/10 flex items-center justify-center border border-[#bc13fe]/20">
-                <Utensils size={18} className="text-[#bc13fe]" />
+            <div className="w-8 h-8 rounded-xl bg-[#bc13fe]/10 flex items-center justify-center border border-[#bc13fe]/20">
+                <Utensils size={16} className="text-[#bc13fe]" />
             </div>
             <div>
                 <h1 className="text-xl font-extrabold tracking-tight">Meal Scan</h1>
-                <p className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest mt-0.5">Optic Engine Live</p>
+                <p className="text-[9px] font-bold text-[#bc13fe] uppercase tracking-widest mt-0.5">Optic Engine Live</p>
             </div>
         </div>
       </header>
 
       {!image ? (
-        <div 
-          onClick={() => fileInputRef.current?.click()}
-          className="glass flex-col items-center justify-center gap-6 cursor-pointer min-h-[420px] flex border-dashed border-2 border-white/10 hover:border-[#bc13fe]/40 bg-white/[0.01]/[0.02] rounded-[48px] shadow-2xl transition-all hover:bg-white/[0.03] group"
-        >
-          <div className="relative">
-             <div className="w-24 h-24 rounded-[36px] bg-[#bc13fe]/[0.08] flex items-center justify-center text-[#bc13fe] group-hover:scale-110 transition-transform duration-500">
-                <Camera size={48} />
-             </div>
-             <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[#bc13fe] flex items-center justify-center text-white shadow-lg">
-                <Sparkles size={16} />
-             </div>
-          </div>
-          <div className="text-center">
-            <span className="text-lg font-extrabold tracking-tight block mb-2">Capture Meal Insight</span>
-            <span className="text-[10px] text-[#64748b] font-bold uppercase tracking-widest">Supports Multi-Component Recognition</span>
-          </div>
-          <input 
-            type="file" 
-            accept="image/*" 
-            capture="environment" 
-            ref={fileInputRef} 
-            onChange={handleCapture}
-            className="hidden" 
-          />
+        <div className="flex flex-col items-center justify-center py-10 gap-8 animate-fade-in">
+           <div 
+             onClick={() => fileInputRef.current?.click()}
+             className="w-full flex flex-col items-center justify-center gap-6 cursor-pointer py-16 bg-[#bc13fe]/[0.02] border-2 border-dashed border-[#bc13fe]/20 rounded-[40px] shadow-xl hover:bg-[#bc13fe]/[0.05] transition-all group"
+           >
+              <div className="relative">
+                 <div className="w-20 h-20 rounded-[28px] bg-[#bc13fe] flex items-center justify-center text-white shadow-[0_10px_30px_rgba(188,19,254,0.4)] group-hover:scale-110 transition-transform duration-500">
+                    <Camera size={36} />
+                 </div>
+                 <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-white flex items-center justify-center text-[#bc13fe] shadow-lg">
+                    <Sparkles size={14} />
+                 </div>
+              </div>
+              <div className="text-center">
+                <span className="text-xl font-black tracking-tight block mb-1">Click to Scan Meal</span>
+                <span className="text-[10px] text-[#64748b] font-bold uppercase tracking-widest">Immediate Vision Analysis</span>
+              </div>
+           </div>
+           
+           <input 
+             type="file" 
+             accept="image/*" 
+             capture="environment" 
+             ref={fileInputRef} 
+             onChange={handleCapture}
+             className="hidden" 
+           />
         </div>
       ) : (
-        <div className="flex flex-col gap-8 animate-fade-in">
-          <div className="relative glass p-2 overflow-hidden bg-black/40 border-none rounded-[40px] shadow-2xl">
-            <img src={image} alt="Meal preview" className="w-full aspect-video object-cover rounded-[32px]" />
+        <div className="flex flex-col gap-6 animate-fade-in">
+          {/* COMPACT IMAGE PREVIEW */}
+          <div className="relative glass p-1.5 overflow-hidden bg-black/40 border-none rounded-[32px] shadow-xl max-w-[280px] mx-auto">
+            <img src={image} alt="Meal preview" className="w-full h-32 object-cover rounded-[24px]" />
             {!result && !loading && (
               <button 
                 onClick={reset}
-                className="absolute top-6 right-6 glass p-3 rounded-full text-white bg-black/60 border-none shadow-xl hover:bg-black/80 transition-colors"
+                className="absolute top-4 right-4 glass p-2 rounded-full text-white bg-black/60 border-none shadow-xl hover:bg-black/80 transition-colors"
               >
-                <X size={20} />
+                <X size={16} />
               </button>
             )}
           </div>
@@ -99,64 +103,61 @@ export default function ScanPage() {
             <button 
               onClick={analyzeMeal}
               disabled={loading}
-              className="btn-primary flex items-center justify-center gap-3 h-16 rounded-[24px] shadow-[0_10px_30px_-5px_var(--primary-glow)]"
+              className="btn-primary flex items-center justify-center gap-3 h-14 rounded-[20px] shadow-[0_10px_30px_-5px_var(--primary-glow)]"
             >
-              {loading ? <RefreshCw className="animate-spin" size={24} /> : <Upload size={24} />}
-              <span className="font-extrabold text-lg">{loading ? "Synchronizing" : "Begin Analysis"}</span>
+              {loading ? <RefreshCw className="animate-spin" size={20} /> : <Upload size={20} />}
+              <span className="font-extrabold text-base">{loading ? "Synchronizing" : "Begin Analysis"}</span>
             </button>
           ) : (
-            <div className="flex flex-col gap-6 animate-fade-in pb-20">
-              <section className="glass border-none flex flex-col gap-8 bg-gradient-to-br from-[#bc13fe]/[0.05] to-transparent rounded-[40px] shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-5 rotate-12">
-                   <Utensils size={180} />
+            <div className="flex flex-col gap-4 animate-fade-in pb-10">
+              <section className="glass border-none flex flex-col gap-5 bg-gradient-to-br from-[#bc13fe]/[0.05] to-transparent rounded-[32px] shadow-xl relative overflow-hidden p-6 pb-2">
+                <div className="absolute top-0 right-0 p-6 opacity-5 rotate-12">
+                   <Utensils size={140} />
                 </div>
                 
                 <div className="flex justify-between items-start z-10">
                   <div>
-                    <h2 className="text-2xl font-black tracking-tight text-[#bc13fe] uppercase">{result.name}</h2>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {result.ingredients?.slice(0, 4).map((ing: string) => (
-                        <span key={ing} className="text-[9px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-3 py-1.5 rounded-full text-[#94a3b8]">
+                    <h2 className="text-xl font-black tracking-tight text-[#bc13fe] uppercase leading-none">{result.name}</h2>
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {result.ingredients?.slice(0, 3).map((ing: string) => (
+                        <span key={ing} className="text-[8px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-2.5 py-1 rounded-full text-[#94a3b8]">
                           {ing}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="text-right glass bg-white/5 border-none p-4 rounded-3xl">
-                    <span className="text-3xl font-black tracking-tighter">{result.calories}</span>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Total Cal</p>
+                  <div className="text-right glass bg-white/10 border-none p-3 rounded-2xl">
+                    <span className="text-2xl font-black tracking-tighter leading-none">{result.calories}</span>
+                    <p className="text-[8px] text-[#4c4c50] uppercase font-bold tracking-widest mt-0.5">Total Cal</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 py-8 border-y border-white/5 z-10">
+                <div className="grid grid-cols-3 gap-2 py-5 border-y border-white/5 z-10">
                   <div className="text-center">
-                    <p className="text-2xl font-black">{result.protein}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Protein Index</p>
+                    <p className="text-xl font-black">{result.protein}g</p>
+                    <p className="text-[8px] text-[#4c4c50] uppercase font-bold tracking-widest mt-0.5">Protein</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-black">{result.carbs}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Carb Load</p>
+                    <p className="text-xl font-black">{result.carbs}g</p>
+                    <p className="text-[8px] text-[#4c4c50] uppercase font-bold tracking-widest mt-0.5">Carbs</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-black">{result.fats}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Fat Ratio</p>
+                    <p className="text-xl font-black">{result.fats}g</p>
+                    <p className="text-[8px] text-[#4c4c50] uppercase font-bold tracking-widest mt-0.5">Fats</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 glass bg-white/[0.01] border-white/5 p-6 rounded-[28px] z-10">
-                  <div className="w-10 h-10 rounded-2xl bg-[#bc13fe]/10 flex items-center justify-center text-[#bc13fe] shrink-0">
-                    <AlertCircle size={24} />
+                <div className="flex items-start gap-3 glass bg-white/[0.01] border-white/5 p-4 rounded-[20px] z-10">
+                  <div className="w-8 h-8 rounded-xl bg-[#bc13fe]/10 flex items-center justify-center text-[#bc13fe] shrink-0">
+                    <AlertCircle size={18} />
                   </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#bc13fe] mb-1">AI Health Advisory</p>
-                    <p className="text-sm text-[#94a3b8] leading-relaxed font-medium">{result.tips}</p>
-                  </div>
+                  <p className="text-[12px] text-[#94a3b8] leading-snug font-medium line-clamp-3">{result.tips}</p>
                 </div>
 
-                <div className="flex gap-4 mt-2 z-10">
-                  <button onClick={reset} className="flex-1 glass py-5 text-xs font-black uppercase tracking-widest bg-white/5 border-none hover:bg-white/10 transition-colors">Discard</button>
-                  <button className="flex-[2] btn-primary py-5 flex items-center justify-center gap-3 rounded-[24px]">
-                    <Check size={20} /> <span className="font-extrabold uppercase">Confirm Entry</span>
+                <div className="flex gap-3 mt-1 z-10 pb-4">
+                  <button onClick={reset} className="flex-1 glass py-4 text-[10px] font-black uppercase tracking-widest bg-white/5 border-none hover:bg-white/10 transition-colors">Discard</button>
+                  <button className="flex-[2] btn-primary py-4 flex items-center justify-center gap-2 rounded-[18px]">
+                    <Check size={18} /> <span className="font-extrabold uppercase text-xs">Add Entry</span>
                   </button>
                 </div>
               </section>
