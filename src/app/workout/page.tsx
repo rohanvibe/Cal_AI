@@ -50,7 +50,10 @@ export default function WorkoutPage() {
       {!workout && !loading && (
         <div className="flex flex-col gap-8 animate-fade-in">
           <section className="glass border-[#bc13fe]/10 bg-white/[0.01] flex flex-col gap-6 p-8 rounded-[40px] shadow-2xl overflow-hidden relative group">
-             <div className="absolute top-0 right-0 p-8 opacity-[0.03] -rotate-12 group-hover:rotate-0 transition-transform duration-700">
+             <div 
+               className="absolute top-0 right-0 p-8 opacity-[0.05] -rotate-12 group-hover:rotate-0 transition-transform duration-700"
+               style={{ pointerEvents: 'none', zIndex: 0 }}
+             >
                 <Zap size={180} className="text-[#bc13fe]" />
              </div>
              <div>
