@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import StatsRing from "@/components/StatsRing";
 import Onboarding from "@/components/Onboarding";
-import { ArrowUpRight, Activity, TrendingUp } from "lucide-react";
+import { Activity, Target, Sparkles, TrendingUp } from "lucide-react";
 
 export default function Home() {
   const [profile, setProfile] = useState<any>(null);
@@ -61,60 +61,76 @@ export default function Home() {
   }
 
   return (
-    <div className="animate-fade-in flex flex-col gap-10 max-w-2xl mx-auto w-full pt-10 pb-20">
-      <header className="flex flex-col gap-2">
-        <div className="flex items-center gap-2 mb-1">
-            <Activity size={16} className="text-[#8a8a8e]" />
-            <span className="text-xs font-bold text-[#8a8a8e] uppercase tracking-[0.2em]">Bio-Stats Connected</span>
+    <div className="animate-fade-in flex flex-col gap-8 max-w-lg mx-auto w-full pt-10">
+      <header className="flex flex-col gap-1 py-4">
+        <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 rounded-full bg-[#bc13fe] animate-pulse shadow-[0_0_10px_#bc13fe]"></div>
+            <span className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#bc13fe]/10">Bio-Terminal Active</span>
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight">Today</h1>
-        <p className="text-lg text-[#8a8a8e] font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+        <p className="text-lg text-[#94a3b8] font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
       </header>
 
-      {/* 
-          FIX: Clear interactive separation
-          The central ring is now housed in a deep-glass card that doesn't look like a button.
-          Individual stats have clear borders.
-      */}
-      <section className="glass flex flex-col items-center gap-10 py-12 shadow-2xl bg-[#111114]">
+      {/* Main Stats Card - Sophisticated and Centered */}
+      <section className="glass flex flex-col items-center gap-8 py-12 relative overflow-hidden group shadow-2xl">
         <StatsRing 
           label="Calories" 
           value={stats.calories} 
           total={stats.goal} 
-          color="#ffffff" 
+          color="#bc13fe" 
           size={240}
         />
         
-        <div className="grid grid-cols-3 w-full border-t border-[#222226] mt-4 pt-10">
-          <div className="flex flex-col items-center gap-3 border-r border-[#222226]">
-            <span className="text-[11px] font-bold text-[#4c4c50] uppercase tracking-widest">Protein</span>
+        <div className="grid grid-cols-3 w-full border-t border-white/5 mt-4 pt-10 px-4">
+          <div className="flex flex-col items-center gap-2 border-r border-white/5">
+            <span className="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest">Protein</span>
             <span className="text-2xl font-bold">{stats.pGoal}g</span>
           </div>
-          <div className="flex flex-col items-center gap-3 border-r border-[#222226]">
-            <span className="text-[11px] font-bold text-[#4c4c50] uppercase tracking-widest">Carbs</span>
+          <div className="flex flex-col items-center gap-2 border-r border-white/5">
+            <span className="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest">Carbs</span>
             <span className="text-2xl font-bold">{stats.cGoal}g</span>
           </div>
-          <div className="flex flex-col items-center gap-3">
-            <span className="text-[11px] font-bold text-[#4c4c50] uppercase tracking-widest">Fats</span>
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest">Fats</span>
             <span className="text-2xl font-bold">{stats.fGoal}g</span>
           </div>
         </div>
       </section>
 
+      {/* AI Intelligence Section - Modern and Balanced */}
       <section className="flex flex-col gap-4">
-        <div className="flex items-center gap-3 px-2">
-           <TrendingUp size={16} className="text-[#5d5dff]" />
-           <h3 className="text-xs font-bold text-[#8a8a8e] uppercase tracking-[0.2em]">AI Intelligence</h3>
+        <div className="flex items-center justify-between px-2">
+           <div className="flex items-center gap-2">
+              <TrendingUp size={16} className="text-[#bc13fe]" />
+              <h3 className="text-xs font-bold text-[#94a3b8] uppercase tracking-widest">AI Profile Analysis</h3>
+           </div>
+           <div className="h-[1px] flex-1 bg-white/5 ml-4"></div>
         </div>
-        <div className="glass bg-[#0c0c0e] border-[#222226] p-8 border-l-4 border-l-[#5d5dff]">
-          <p className="text-[16px] leading-relaxed text-[#d1d1d6] font-medium">
+        <div className="glass bg-[#bc13fe]/[0.02] border-[#bc13fe]/20 p-8 border-l-4 border-l-[#bc13fe] rounded-3xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-[0.05] -rotate-12 transition-transform group-hover:rotate-0 duration-700">
+            <Sparkles size={120} className="text-[#bc13fe]" />
+          </div>
+          <p className="text-[15px] leading-relaxed text-[#d1d1d6] font-medium z-10 relative">
             "{profile.aiReasoning}"
           </p>
         </div>
       </section>
 
+      {/* Quick Action Grid */}
+      <section className="grid grid-cols-2 gap-4 pb-20">
+        <div className="glass p-5 flex flex-col gap-2 rounded-3xl border-none bg-gradient-to-br from-white/[0.04] to-transparent">
+          <span className="text-[9px] font-black uppercase tracking-widest text-[#94a3b8]">Weight Registry</span>
+          <p className="text-xl font-bold">{profile.weight} kg</p>
+        </div>
+        <div className="glass p-5 flex flex-col gap-2 rounded-3xl border-none bg-gradient-to-br from-white/[0.04] to-transparent">
+          <span className="text-[9px] font-black uppercase tracking-widest text-[#94a3b8]">Daily Target</span>
+          <p className="text-xl font-bold">{profile.suggestedGoal || "Custom"}</p>
+        </div>
+      </section>
+
       <style jsx>{`
         .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: 1fr 1fr; }
         .grid-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
       `}</style>
     </div>

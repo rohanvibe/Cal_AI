@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Camera, RefreshCw, Upload, Check, X, Info } from "lucide-react";
+import { Camera, RefreshCw, Upload, Check, X, AlertCircle, Sparkles, Utensils } from "lucide-react";
 
 export default function ScanPage() {
   const [image, setImage] = useState<string | null>(null);
@@ -42,21 +42,35 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="animate-fade-in flex flex-col gap-6">
-      <header className="py-4">
-        <h1 className="text-2xl font-semibold tracking-tight">Scan Meal</h1>
-        <p className="text-sm text-[#8a8a8e]">Verify nutrition via machine vision.</p>
+    <div className="flex flex-col gap-10 max-w-lg mx-auto w-full pt-10 pb-20 px-4">
+      <header className="py-6 flex justify-between items-center border-b border-white/5 px-2">
+        <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-2xl bg-[#bc13fe]/10 flex items-center justify-center border border-[#bc13fe]/20">
+                <Utensils size={18} className="text-[#bc13fe]" />
+            </div>
+            <div>
+                <h1 className="text-xl font-extrabold tracking-tight">Meal Scan</h1>
+                <p className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest mt-0.5">Optic Engine Live</p>
+            </div>
+        </div>
       </header>
 
       {!image ? (
         <div 
           onClick={() => fileInputRef.current?.click()}
-          className="glass flex-col items-center justify-center gap-4 cursor-pointer min-h-[360px] flex border-dashed border-2"
+          className="glass flex-col items-center justify-center gap-6 cursor-pointer min-h-[420px] flex border-dashed border-2 border-white/10 hover:border-[#bc13fe]/40 bg-white/[0.01]/[0.02] rounded-[48px] shadow-2xl transition-all hover:bg-white/[0.03] group"
         >
-          <Camera size={32} className="text-[#8a8a8e]" />
+          <div className="relative">
+             <div className="w-24 h-24 rounded-[36px] bg-[#bc13fe]/[0.08] flex items-center justify-center text-[#bc13fe] group-hover:scale-110 transition-transform duration-500">
+                <Camera size={48} />
+             </div>
+             <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[#bc13fe] flex items-center justify-center text-white shadow-lg">
+                <Sparkles size={16} />
+             </div>
+          </div>
           <div className="text-center">
-            <span className="text-sm font-medium block">Begin Analysis</span>
-            <span className="text-xs text-[#4c4c50]">Supports JPEG, PNG</span>
+            <span className="text-lg font-extrabold tracking-tight block mb-2">Capture Meal Insight</span>
+            <span className="text-[10px] text-[#64748b] font-bold uppercase tracking-widest">Supports Multi-Component Recognition</span>
           </div>
           <input 
             type="file" 
@@ -68,15 +82,15 @@ export default function ScanPage() {
           />
         </div>
       ) : (
-        <div className="flex flex-col gap-6 animate-fade-in">
-          <div className="relative glass p-1 overflow-hidden bg-black">
-            <img src={image} alt="Meal preview" className="w-full aspect-video object-cover rounded-xl" />
+        <div className="flex flex-col gap-8 animate-fade-in">
+          <div className="relative glass p-2 overflow-hidden bg-black/40 border-none rounded-[40px] shadow-2xl">
+            <img src={image} alt="Meal preview" className="w-full aspect-video object-cover rounded-[32px]" />
             {!result && !loading && (
               <button 
                 onClick={reset}
-                className="absolute top-4 right-4 glass p-2 rounded-full text-white bg-black/60 border-none"
+                className="absolute top-6 right-6 glass p-3 rounded-full text-white bg-black/60 border-none shadow-xl hover:bg-black/80 transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             )}
           </div>
@@ -85,55 +99,64 @@ export default function ScanPage() {
             <button 
               onClick={analyzeMeal}
               disabled={loading}
-              className="btn-primary flex items-center justify-center gap-2 h-14"
+              className="btn-primary flex items-center justify-center gap-3 h-16 rounded-[24px] shadow-[0_10px_30px_-5px_var(--primary-glow)]"
             >
-              {loading ? <RefreshCw className="animate-spin" size={18} /> : <Upload size={18} />}
-              {loading ? "Processing" : "Analyze Meal"}
+              {loading ? <RefreshCw className="animate-spin" size={24} /> : <Upload size={24} />}
+              <span className="font-extrabold text-lg">{loading ? "Synchronizing" : "Begin Analysis"}</span>
             </button>
           ) : (
-            <div className="flex flex-col gap-6 pb-10">
-              <section className="glass border-none flex flex-col gap-6">
-                <div className="flex justify-between items-start">
+            <div className="flex flex-col gap-6 animate-fade-in pb-20">
+              <section className="glass border-none flex flex-col gap-8 bg-gradient-to-br from-[#bc13fe]/[0.05] to-transparent rounded-[40px] shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5 rotate-12">
+                   <Utensils size={180} />
+                </div>
+                
+                <div className="flex justify-between items-start z-10">
                   <div>
-                    <h2 className="text-lg font-semibold">{result.name}</h2>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {result.ingredients?.slice(0, 3).map((ing: string) => (
-                        <span key={ing} className="text-[10px] bg-[#1c1c1f] px-2 py-1 rounded text-[#8a8a8e] font-medium uppercase tracking-tight">
+                    <h2 className="text-2xl font-black tracking-tight text-[#bc13fe] uppercase">{result.name}</h2>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {result.ingredients?.slice(0, 4).map((ing: string) => (
+                        <span key={ing} className="text-[9px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-3 py-1.5 rounded-full text-[#94a3b8]">
                           {ing}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-bold">{result.calories}</span>
-                    <p className="text-[10px] text-[#4c4c50] uppercase font-bold tracking-wider">Calories</p>
+                  <div className="text-right glass bg-white/5 border-none p-4 rounded-3xl">
+                    <span className="text-3xl font-black tracking-tighter">{result.calories}</span>
+                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Total Cal</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 py-4 border-y border-[#1c1c1f]">
+                <div className="grid grid-cols-3 gap-2 py-8 border-y border-white/5 z-10">
                   <div className="text-center">
-                    <p className="text-sm font-semibold">{result.protein}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-wider">Protein</p>
+                    <p className="text-2xl font-black">{result.protein}g</p>
+                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Protein Index</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-semibold">{result.carbs}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-wider">Carbs</p>
+                    <p className="text-2xl font-black">{result.carbs}g</p>
+                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Carb Load</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-semibold">{result.fats}g</p>
-                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-wider">Fats</p>
+                    <p className="text-2xl font-black">{result.fats}g</p>
+                    <p className="text-[9px] text-[#4c4c50] uppercase font-bold tracking-widest mt-1">Fat Ratio</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-[#111114] p-4 rounded-xl border border-[#1c1c1f]">
-                  <Info size={16} className="text-[#8a8a8e] mt-0.5" />
-                  <p className="text-xs text-[#8a8a8e] leading-relaxed">{result.tips}</p>
+                <div className="flex items-start gap-4 glass bg-white/[0.01] border-white/5 p-6 rounded-[28px] z-10">
+                  <div className="w-10 h-10 rounded-2xl bg-[#bc13fe]/10 flex items-center justify-center text-[#bc13fe] shrink-0">
+                    <AlertCircle size={24} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#bc13fe] mb-1">AI Health Advisory</p>
+                    <p className="text-sm text-[#94a3b8] leading-relaxed font-medium">{result.tips}</p>
+                  </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button onClick={reset} className="flex-1 glass py-3 text-xs font-semibold">Cancel</button>
-                  <button className="flex-[2] btn-primary py-3 flex items-center justify-center gap-2">
-                    <Check size={16} /> Save Data
+                <div className="flex gap-4 mt-2 z-10">
+                  <button onClick={reset} className="flex-1 glass py-5 text-xs font-black uppercase tracking-widest bg-white/5 border-none hover:bg-white/10 transition-colors">Discard</button>
+                  <button className="flex-[2] btn-primary py-5 flex items-center justify-center gap-3 rounded-[24px]">
+                    <Check size={20} /> <span className="font-extrabold uppercase">Confirm Entry</span>
                   </button>
                 </div>
               </section>

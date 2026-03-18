@@ -1,16 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-color: #0c0c0e;
-  --card-bg: #16161a;
-  --card-border: #222226;
-  --primary: #ffffff;
-  --accent: #5d5dff;
+  --bg-color: #08080a;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #bc13fe;
+  --primary-glow: rgba(188, 19, 254, 0.15);
   --text-main: #ffffff;
-  --text-secondary: #8a8a8e;
+  --text-secondary: #94a3b8;
   --font-main: 'Outfit', sans-serif;
-  --radius-lg: 20px;
-  --radius-md: 14px;
+  --glass-blur: blur(12px);
 }
 
 * {
@@ -34,6 +33,10 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  /* Subtle mesh gradient for 'fancy' feel without clutter */
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(280, 100%, 50%, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(200, 100%, 50%, 0.03) 0px, transparent 50%);
 }
 
 .pwa-container {
@@ -45,78 +48,75 @@ body {
   flex-direction: column;
 }
 
-/* 
-  FIX: Clear Button Identification
-  Buttons should look like SOLID blocks that are clearly interactive.
-*/
+/* Premium Balanced Card */
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Balanced Button - Not plain text, not a brick */
 .btn-primary {
-  background: var(--primary) !important;
-  color: #000 !important;
+  background: linear-gradient(135deg, var(--primary), #8a2be2);
+  color: #fff;
   border: none;
-  padding: 18px 24px;
-  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  border-radius: 18px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 20px -10px rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 20px -10px var(--primary-glow);
 }
 
 .btn-primary:active {
   transform: scale(0.96);
-  opacity: 0.9;
 }
 
-.glass {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  transition: all 0.3s ease;
-}
-
-/* 
-  FIX: Modern Message Field
-  Removing the 'vintage' look by using deep backgrounds, refined focus states, and rounded corners.
-*/
+/* Modern Rounded Input */
 .glass-input {
-  background: #1c1c21 !important;
-  border: 2px solid #2d2d33 !important;
-  border-radius: var(--radius-md) !important;
-  padding: 16px 20px !important;
-  color: white !important;
-  width: 100% !important;
-  outline: none !important;
-  font-size: 16px !important;
-  font-family: var(--font-main) !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 16px 20px;
+  color: white;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  font-family: var(--font-main);
+  transition: all 0.2s ease;
 }
 
 .glass-input:focus {
-  border-color: #5d5dff !important;
-  background: #25252b !important;
-  box-shadow: 0 0 0 4px rgba(93, 93, 255, 0.1) !important;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
-/* Heading hierarchy to prevent 'text looking like buttons' */
-h1, h2, h3, h4 {
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
+.glass-input::placeholder {
+  color: #5a5a6a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 ::-webkit-scrollbar {
