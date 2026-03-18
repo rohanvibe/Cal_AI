@@ -118,13 +118,13 @@ export default function Home() {
         <div className="glass bg-[#bc13fe]/[0.02] border-[#bc13fe]/20 p-8 border-l-4 border-l-[#bc13fe] rounded-3xl relative overflow-hidden group">
            <div 
              className="absolute top-0 right-0 p-4 opacity-[0.05] -rotate-12 transition-transform group-hover:rotate-0 duration-700"
-             style={{ pointerEvents: 'none', zIndex: 0 }}
+             style={{ pointerEvents: 'none', zIndex: -1 }}
            >
              <Sparkles size={120} className="text-[#bc13fe]" />
            </div>
-          <p className="text-[15px] leading-relaxed text-[#d1d1d6] font-medium z-10 relative">
-            "{profile.aiReasoning}"
-          </p>
+           <p className="text-[15px] leading-relaxed text-[#d1d1d6] font-medium z-10 relative" style={{ position: 'relative', zIndex: 1 }}>
+             "{profile.aiReasoning}"
+           </p>
         </div>
       </section>
 

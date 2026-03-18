@@ -52,11 +52,11 @@ export default function WorkoutPage() {
           <section className="glass border-[#bc13fe]/10 bg-white/[0.01] flex flex-col gap-6 p-8 rounded-[40px] shadow-2xl overflow-hidden relative group">
              <div 
                className="absolute top-0 right-0 p-8 opacity-[0.05] -rotate-12 group-hover:rotate-0 transition-transform duration-700"
-               style={{ pointerEvents: 'none', zIndex: 0 }}
+               style={{ pointerEvents: 'none', zIndex: -1 }}
              >
                 <Zap size={180} className="text-[#bc13fe]" />
              </div>
-             <div>
+             <div style={{ position: 'relative', zIndex: 1 }}>
                 <h3 className="text-xs font-black text-[#bc13fe] uppercase tracking-widest px-3 py-1 bg-[#bc13fe]/10 rounded-full inline-block mb-4">Environment Config</h3>
                 <textarea 
                     value={constraints}
