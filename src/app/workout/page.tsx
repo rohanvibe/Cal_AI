@@ -41,8 +41,8 @@ export default function WorkoutPage() {
                 <Activity size={18} className="text-[#bc13fe]" />
             </div>
             <div>
-                <h1 className="text-xl font-extrabold tracking-tight">Training</h1>
-                <p className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest mt-0.5">Bio-Adaptive Engine</p>
+                <h1 className="text-xl font-extrabold tracking-tight">Workouts</h1>
+                <p className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest mt-0.5">AI Guided</p>
             </div>
         </div>
       </header>
@@ -51,11 +51,11 @@ export default function WorkoutPage() {
         <div className="flex flex-col gap-8 animate-fade-in">
           <section className="glass border-[#bc13fe]/10 bg-white/[0.01] flex flex-col gap-6 p-8 rounded-[40px] shadow-2xl overflow-hidden relative group">
              <div>
-                <h3 className="text-xs font-black text-[#bc13fe] uppercase tracking-widest px-3 py-1 bg-[#bc13fe]/10 rounded-full inline-block mb-4">Environment Config</h3>
+                <h3 className="text-xs font-black text-[#bc13fe] uppercase tracking-widest px-3 py-1 bg-[#bc13fe]/10 rounded-full inline-block mb-4">Workout Style</h3>
                 <textarea 
                     value={constraints}
                     onChange={(e) => setConstraints(e.target.value)}
-                    placeholder="Specify equipment, limitations, or focus (e.g. only pushups, no equipment, joint pain)..."
+                    placeholder="E.g. only pushups, no equipment, joint pain, cardio focus..."
                     className="glass-input !min-h-[160px] !bg-black/40 !border-white/5 !rounded-[28px] !p-6 text-sm leading-relaxed outline-none"
                 />
              </div>
@@ -63,11 +63,11 @@ export default function WorkoutPage() {
              <div className="flex flex-col items-center gap-2 pt-4">
                <div className="flex items-center gap-2 text-[#94a3b8] text-[10px] font-black uppercase tracking-widest">
                   <Info size={12} />
-                  <span>Age-Balanced Optimization Active</span>
+                  <span>Age-Safe Exercises Active</span>
                </div>
                <button onClick={generateNewWorkout} className="btn-primary mt-4 h-16 rounded-[24px]">
                  <Sparkles size={18} className="mr-2" />
-                 Generate Training Session
+                 Create Workout Plan
                </button>
              </div>
           </section>
@@ -81,8 +81,8 @@ export default function WorkoutPage() {
                 <Activity size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
             </div>
             <div>
-                <h2 className="text-2xl font-black tracking-tight uppercase">Compiling Protocol</h2>
-                <p className="text-sm text-[#94a3b8] mt-2 font-medium tracking-wide">Synthesizing age-appropriate bio-metrics...</p>
+                <h2 className="text-2xl font-black tracking-tight uppercase">Creating Plan</h2>
+                <p className="text-sm text-[#94a3b8] mt-2 font-medium tracking-wide">Choosing the best exercises for you...</p>
             </div>
         </div>
       )}
@@ -95,15 +95,15 @@ export default function WorkoutPage() {
             </div>
             <h2 className="text-2xl font-black tracking-tighter uppercase text-white leading-none">{workout.planName}</h2>
             <div className="flex gap-3 mt-5">
-                <span className="text-[9px] font-black text-white/50 bg-black/20 border border-white/10 px-3 py-1 rounded-full uppercase tracking-widest">5 Movements</span>
-                <span className="text-[9px] font-black text-white/50 bg-black/20 border border-white/10 px-3 py-1 rounded-full uppercase tracking-widest">AI Generated</span>
+                <span className="text-[9px] font-black text-white/50 bg-black/20 border border-white/10 px-3 py-1 rounded-full uppercase tracking-widest">Exercises</span>
+                <span className="text-[9px] font-black text-white/50 bg-black/20 border border-white/10 px-3 py-1 rounded-full uppercase tracking-widest">AI Result</span>
             </div>
           </section>
 
           <div className="flex flex-col gap-3">
              <div className="flex items-center gap-2 px-4 mb-2">
                 <ClipboardList size={14} className="text-[#94a3b8]" />
-                <h3 className="text-[10px] font-black text-[#94a3b8] uppercase tracking-[0.2em]">Execution Order</h3>
+                <h3 className="text-[10px] font-black text-[#94a3b8] uppercase tracking-[0.2em]">Exercise List</h3>
              </div>
             {workout?.exercises?.map((ex: any, idx: number) => (
               <div key={idx} className="glass flex items-center justify-between p-6 bg-white/[0.02] border-white/5 hover:bg-white/[0.04] transition-all rounded-[28px] border ripple">
@@ -130,7 +130,7 @@ export default function WorkoutPage() {
           </div>
 
           <button onClick={() => setWorkout(null)} className="btn-primary h-16 rounded-[24px] mt-4 shadow-xl">
-             Complete Session Data Sync
+             Done
           </button>
         </div>
       )}

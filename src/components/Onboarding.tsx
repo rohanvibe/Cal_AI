@@ -42,7 +42,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       onComplete(aiEnrichedData);
     } catch (error: any) {
       console.error(error);
-      alert(`AI Sync Failed: ${error.message}.`);
+      alert(`Setup Failed: ${error.message}.`);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div className="fixed inset-0 bg-[#08080a] z-[2000] flex items-center justify-center p-8 animate-fade-in overflow-hidden relative">
-      {/* Background Decorative Mesh - Modern Fancy Touches */}
        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#bc13fe] to-transparent opacity-20"></div>
        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#bc13fe]/5 rounded-full blur-[120px] -z-10"></div>
 
@@ -61,11 +60,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     <div className="w-24 h-24 rounded-[36px] bg-[#bc13fe]/10 flex items-center justify-center border border-[#bc13fe]/20 animate-pulse">
                         <Activity size={48} className="text-[#bc13fe]" />
                     </div>
-                    <Sparkles size={24} className="absolute -top-3 -right-3 text-[#bc13fe]" />
                 </div>
                 <div>
-                   <h2 className="text-4xl font-extrabold tracking-tight uppercase italic leading-none">Syncing Profile</h2>
-                   <p className="text-lg text-[#94a3b8] mt-5 font-medium max-w-xs leading-relaxed">Synthesizing biometric data for age-adaptive nutrition.</p>
+                   <h2 className="text-4xl font-extrabold tracking-tight uppercase italic leading-none">Setting Up</h2>
+                   <p className="text-lg text-[#94a3b8] mt-5 font-medium max-w-xs leading-relaxed">Creating your personalized plan...</p>
                 </div>
             </div>
         ) : (
@@ -77,11 +75,11 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 ))}
             </div>
             <h1 className="text-5xl font-extrabold tracking-tighter leading-none mt-4 uppercase italic">
-                {step === 1 && "The Genesis"}
-                {step === 2 && "Core Metrics"}
-                {step === 3 && "Destiny"}
+                {step === 1 && "Welcome"}
+                {step === 2 && "Your Stats"}
+                {step === 3 && "Your Goal"}
             </h1>
-            <p className="text-sm text-[#94a3b8] font-semibold tracking-widest uppercase opacity-60">Phase {step} Data Entry</p>
+            <p className="text-sm text-[#94a3b8] font-semibold tracking-widest uppercase opacity-60">Step {step} of 3</p>
         </header>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full max-w-sm">
@@ -90,7 +88,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               <input 
                 required 
                 type="text" 
-                placeholder="Subject Name" 
+                placeholder="Your Name" 
                 className="glass-input text-center !py-6 shadow-2xl !bg-white/[0.03] !border-white/5"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -98,13 +96,13 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               <input 
                 required 
                 type="number" 
-                placeholder="Birth Age" 
+                placeholder="Your Age" 
                 className="glass-input text-center !py-6 shadow-2xl !bg-white/[0.03] !border-white/5"
                 value={formData.age}
                 onChange={(e) => setFormData({...formData, age: e.target.value})}
               />
               <button type="button" onClick={nextStep} className="btn-primary mt-6 !py-6 h-18 text-xl !rounded-[24px]">
-                Proceed <ArrowRight size={22} className="ml-3" />
+                Continue <ArrowRight size={22} className="ml-3" />
               </button>
             </div>
           )}
@@ -115,7 +113,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input 
                   required 
                   type="number" 
-                  placeholder="KG"
+                  placeholder="Weight (kg)"
                   className="glass-input text-center !py-6 shadow-2xl !bg-white/[0.03] !border-white/5"
                   value={formData.weight}
                   onChange={(e) => setFormData({...formData, weight: e.target.value})}
@@ -123,7 +121,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input 
                   required 
                   type="number" 
-                  placeholder="CM"
+                  placeholder="Height (cm)"
                   className="glass-input text-center !py-6 shadow-2xl !bg-white/[0.03] !border-white/5"
                   value={formData.height}
                   onChange={(e) => setFormData({...formData, height: e.target.value})}
@@ -136,10 +134,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   value={formData.activity}
                   onChange={(e) => setFormData({...formData, activity: e.target.value})}
                 >
-                  <option value="sedentary">Sedentary Base</option>
-                  <option value="light">Light Activity Index</option>
-                  <option value="moderate">Moderate Optimization</option>
-                  <option value="active">High Performance Load</option>
+                  <option value="sedentary">Not Active</option>
+                  <option value="light">Light Activity</option>
+                  <option value="moderate">Moderately Active</option>
+                  <option value="active">Very Active</option>
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[#94a3b8] opacity-20 pointer-events-none group-focus-within:text-[#bc13fe] group-focus-within:opacity-100 transition-all duration-300">
                     <Activity size={18} />
@@ -148,7 +146,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <button type="button" onClick={prevStep} className="glass font-black uppercase tracking-widest text-[#94a3b8] !py-6 !bg-white/[0.01] border-white/5 hover:bg-white/5 transition-all !rounded-[24px] shadow-sm">Back</button>
-                <button type="button" onClick={nextStep} className="btn-primary !py-6 h-18 text-xl !rounded-[24px]">Advanced</button>
+                <button type="button" onClick={nextStep} className="btn-primary !py-6 h-18 text-xl !rounded-[24px]">Next</button>
               </div>
             </div>
           )}
@@ -157,7 +155,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div className="flex flex-col gap-4 animate-fade-in w-full">
               <textarea 
                 required
-                placeholder="Tell AI your objective destination..."
+                placeholder="What is your fitness goal?"
                 value={formData.goal}
                 onChange={(e) => setFormData({...formData, goal: e.target.value})}
                 className="glass-input min-h-[220px] !py-8 !leading-relaxed text-center shadow-2xl !bg-white/[0.03] !border-white/5 !rounded-[32px] md:text-lg"
@@ -165,7 +163,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <button type="button" onClick={prevStep} className="glass font-black uppercase tracking-widest text-[#94a3b8] !py-6 !bg-white/[0.01] border-white/5 hover:bg-white/5 transition-all !rounded-[24px] shadow-sm">Back</button>
-                <button type="submit" className="btn-primary !py-6 h-18 text-xl !rounded-[24px]">Finish Sync</button>
+                <button type="submit" className="btn-primary !py-6 h-18 text-xl !rounded-[24px]">Save & Finish</button>
               </div>
             </div>
           )}

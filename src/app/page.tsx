@@ -74,7 +74,7 @@ export default function Home() {
       <header className="flex flex-col gap-1 py-4">
         <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-[#bc13fe] animate-pulse shadow-[0_0_10px_#bc13fe]"></div>
-            <span className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#bc13fe]/10">Bio-Terminal Active</span>
+            <span className="text-[10px] font-bold text-[#bc13fe] uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#bc13fe]/10">AI Online</span>
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight">Today</h1>
         <p className="text-lg text-[#94a3b8] font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
@@ -111,7 +111,7 @@ export default function Home() {
         <div className="flex items-center justify-between px-2">
            <div className="flex items-center gap-2">
               <TrendingUp size={16} className="text-[#bc13fe]" />
-              <h3 className="text-xs font-bold text-[#94a3b8] uppercase tracking-widest">AI Intelligence</h3>
+              <h3 className="text-xs font-bold text-[#94a3b8] uppercase tracking-widest">AI Tips</h3>
            </div>
            <div className="h-[1px] flex-1 bg-white/5 ml-4"></div>
         </div>
@@ -125,11 +125,11 @@ export default function Home() {
       {/* Quick Action Grid */}
       <section className="grid grid-cols-2 gap-4 pb-20">
         <div className="glass p-5 flex flex-col gap-2 rounded-[24px] border-none bg-white/[0.04]">
-          <span className="text-[8px] font-black uppercase tracking-widest text-[#94a3b8]">Weight Registry</span>
+          <span className="text-[8px] font-black uppercase tracking-widest text-[#94a3b8]">Current Weight</span>
           <p className="text-xl font-bold">{profile.weight} kg</p>
         </div>
         <div className="glass p-5 flex flex-col gap-2 rounded-[24px] border-none bg-white/[0.04]">
-          <span className="text-[8px] font-black uppercase tracking-widest text-[#94a3b8]">Target Goal</span>
+          <span className="text-[8px] font-black uppercase tracking-widest text-[#94a3b8]">Goal Target</span>
           <p className="text-xl font-bold uppercase truncate">{profile.suggestedGoal || "Custom"}</p>
         </div>
       </section>
