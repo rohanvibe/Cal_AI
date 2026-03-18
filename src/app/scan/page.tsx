@@ -68,31 +68,29 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="flex flex-col gap-4 max-w-lg mx-auto w-full pt-4 pb-20 px-4">
-      <header className="py-2 flex justify-between items-center border-b border-white/5 px-2">
-        <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#bc13fe]/10 flex items-center justify-center border border-[#bc13fe]/20">
-                <Utensils size={16} className="text-[#bc13fe]" />
-            </div>
-            <h1 className="text-xl font-extrabold tracking-tight">Scanner</h1>
-        </div>
-      </header>
-
+    <div className="flex flex-col h-[calc(100vh-140px)] max-w-lg mx-auto w-full pt-4 pb-10 px-4">
       {!image ? (
-        <div className="flex flex-col items-center justify-center py-10 gap-8 animate-fade-in">
-           {/* ONE BUTTON DESIGN */}
+        <div className="flex-1 flex flex-col items-center justify-center animate-fade-in py-10">
+           {/* BIG CONTRASTY BUTTON */}
            <button 
              onClick={() => fileInputRef.current?.click()}
-             className="w-full h-[60vh] flex flex-col items-center justify-center gap-8 bg-[#bc13fe] rounded-[48px] shadow-[0_20px_60px_-10px_rgba(188,19,254,0.5)] border-none transition-all active:scale-[0.98] group relative overflow-hidden"
+             className="w-full h-full flex flex-col items-center justify-center gap-10 bg-[#bc13fe] rounded-[60px] shadow-[0_30px_90px_-15px_rgba(188,19,254,0.6)] border-none transition-all active:scale-[0.96] relative overflow-hidden group"
            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-              <div className="relative z-10 flex flex-col items-center gap-6">
-                 <div className="w-24 h-24 rounded-[36px] bg-white flex items-center justify-center text-[#bc13fe] shadow-2xl">
-                    <Camera size={48} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              
+              <div className="relative z-10 flex flex-col items-center gap-8">
+                 {/* 
+                    FIX: Contrast Issue 
+                    Was: white circle + violet icon (confusing in some lighting)
+                    Now: Deep Black circle + Pure White Icon (IMPOSSIBLE to miss)
+                 */}
+                 <div className="w-28 h-28 rounded-[40px] bg-black flex items-center justify-center text-white shadow-2xl transition-transform group-active:scale-90">
+                    <Camera size={56} strokeWidth={2.5} />
                  </div>
+                 
                  <div className="text-center">
-                    <span className="text-3xl font-black tracking-tight block text-white uppercase italic">Scan Meal</span>
-                    <span className="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-2">Activate Optic Tracking</span>
+                    <h2 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none mb-3">Add Meal</h2>
+                    <span className="text-[10px] text-white/40 font-black uppercase tracking-[0.3em] inline-block py-1 px-3 bg-black/20 rounded-full">Vision Engine Engaged</span>
                  </div>
               </div>
            </button>
@@ -107,75 +105,68 @@ export default function ScanPage() {
            />
         </div>
       ) : (
-        <div className="flex flex-col gap-4 animate-fade-in">
-          {/* ULTRA COMPACT IMAGE PREVIEW */}
-          <div className="relative px-2">
-            <div className="glass p-1.5 overflow-hidden bg-black/40 border-none rounded-[24px] shadow-xl w-32 h-24 mx-auto relative">
-                <img src={image} alt="Meal preview" className="w-full h-full object-cover rounded-[18px]" />
-                {!result && !loading && (
+        <div className="flex flex-col gap-4 animate-fade-in flex-1">
+          {/* ULTRA MINI PREVIEW TO SAVE SPACE */}
+          {!result && (
+            <div className="relative h-2/3 flex items-center justify-center">
+              <div className="relative glass p-2 bg-black/40 rounded-[32px] overflow-hidden max-w-[200px] w-full">
+                <img src={image} alt="Meal preview" className="w-full aspect-square object-cover rounded-[24px]" />
                 <button 
                     onClick={reset}
-                    className="absolute top-2 right-2 glass p-1.5 rounded-full text-white bg-black/60 border-none shadow-xl"
+                    className="absolute top-4 right-4 glass p-2 rounded-full text-white bg-black/60 border-none"
                 >
-                    <X size={14} />
+                    <X size={18} />
                 </button>
-                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {!result ? (
-            <button 
-              onClick={analyzeMeal}
-              disabled={loading}
-              className="btn-primary h-16 rounded-[24px] shadow-[0_10px_30px_-5px_var(--primary-glow)] flex items-center justify-center gap-3"
-            >
-              {loading ? <RefreshCw className="animate-spin" size={24} /> : <Upload size={24} />}
-              <span className="font-extrabold text-xl uppercase italic">{loading ? "Analyzing..." : "Analyze Meal"}</span>
-            </button>
+            <div className="mt-auto pb-10">
+                <button 
+                onClick={analyzeMeal}
+                disabled={loading}
+                className="btn-primary h-20 rounded-[30px] shadow-[0_15px_40px_-5px_var(--primary-glow)] flex items-center justify-center gap-4 text-2xl"
+                >
+                {loading ? <RefreshCw className="animate-spin" size={32} /> : <Upload size={32} />}
+                <span className="font-black uppercase italic">{loading ? "Scanning..." : "Sync Meal"}</span>
+                </button>
+            </div>
           ) : (
-            <div className="flex flex-col gap-4 animate-fade-in pb-10">
-              <section className="glass border-none flex flex-col gap-4 bg-[#16161a] rounded-[32px] shadow-2xl relative overflow-hidden p-6">
-                <div className="flex justify-between items-start z-10">
+            <div className="flex flex-col h-full animate-fade-in justify-end pb-4">
+              {/* COMPACT FLOATING RESULT CARD */}
+              <section className="glass border-none flex flex-col gap-4 bg-[#111114] rounded-[40px] shadow-2xl p-6 border-t-2 border-t-[#bc13fe]/20">
+                <div className="flex justify-between items-center">
                   <div>
-                    <h2 className="text-2xl font-black tracking-tight text-[#bc13fe] uppercase leading-tight">{result.name}</h2>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {result.ingredients?.slice(0, 3).map((ing: string) => (
-                        <span key={ing} className="text-[8px] font-black uppercase tracking-widest bg-white/5 px-2 py-1 rounded-full text-[#94a3b8]">
-                          {ing}
-                        </span>
-                      ))}
-                    </div>
+                    <h2 className="text-2xl font-black tracking-tighter text-[#bc13fe] uppercase leading-none mb-2">{result.name}</h2>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#94a3b8] opacity-60 line-clamp-1">{result.ingredients?.join(' • ')}</p>
                   </div>
-                  <div className="text-right glass bg-white/5 border-none p-3 rounded-2xl min-w-[80px]">
-                    <span className="text-2xl font-black tracking-tighter">{result.calories}</span>
-                    <p className="text-[8px] text-[#4c4c50] uppercase font-bold tracking-widest">Kcal</p>
+                  <div className="text-right glass bg-white/5 border-none p-3 px-5 rounded-3xl">
+                    <span className="text-3xl font-black tracking-tighter text-white">{result.calories}</span>
+                    <p className="text-[8px] text-[#bc13fe] uppercase font-black tracking-widest mt-0.5">Calories</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 py-4 border-y border-white/5 z-10">
+                <div className="grid grid-cols-3 gap-2 py-5 border-y border-white/5 mx-2">
                   <div className="text-center">
-                    <p className="text-lg font-black">{result.protein}g</p>
+                    <p className="text-xl font-black text-white">{result.protein}g</p>
                     <p className="text-[7px] text-[#4c4c50] uppercase font-bold tracking-widest">Protein</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-black">{result.carbs}g</p>
+                    <p className="text-xl font-black text-white">{result.carbs}g</p>
                     <p className="text-[7px] text-[#4c4c50] uppercase font-bold tracking-widest">Carbs</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-black">{result.fats}g</p>
+                    <p className="text-xl font-black text-white">{result.fats}g</p>
                     <p className="text-[7px] text-[#4c4c50] uppercase font-bold tracking-widest">Fats</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 glass bg-white/[0.01] border-white/5 p-4 rounded-[18px] z-10">
-                    <AlertCircle size={14} className="text-[#bc13fe] mt-0.5" />
-                    <p className="text-[11px] text-[#94a3b8] leading-tight font-medium line-clamp-2">{result.tips}</p>
-                </div>
-
-                <div className="flex gap-3 mt-1 z-10">
-                  <button onClick={reset} className="flex-1 glass py-4 text-[9px] font-black uppercase tracking-widest bg-white/5 border-none">Discard</button>
-                  <button onClick={handleSave} className="flex-[2] btn-primary py-4 flex items-center justify-center gap-2 rounded-[18px]">
-                    <Check size={18} /> <span className="font-extrabold uppercase text-xs">Add Entry</span>
+                {/* SUPER COMPACT BUTTONS - NO SCROLLING */}
+                <div className="flex gap-4 pt-2">
+                  <button onClick={reset} className="flex-1 glass py-5 text-[10px] font-black uppercase tracking-widest border-none bg-white/5 text-[#94a3b8] rounded-[24px]">Cancel</button>
+                  <button onClick={handleSave} className="flex-[3] btn-primary py-5 flex items-center justify-center gap-3 rounded-[24px] text-lg">
+                    <Check size={24} /> <span className="font-black uppercase italic">Add Entry</span>
                   </button>
                 </div>
               </section>
